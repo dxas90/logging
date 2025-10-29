@@ -1,0 +1,42 @@
+---
+# yaml-language-server: $schema=https://homelab-schemas-epg.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app infra-apps-dragonfly-operator
+  namespace: flux-system
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  path: ./infrastructure/base/database/dragonfly-operator/app
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  prune: true
+  wait: true
+  interval: 30m
+  timeout: 5m
+---
+# yaml-language-server: $schema=https://homelab-schemas-epg.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app infra-apps-dragonfly-cluster
+  namespace: flux-system
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  path: ./infrastructure/base/database/dragonfly-operator/cluster
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  dependsOn:
+    - name: infra-apps-dragonfly-operator
+  prune: true
+  wait: false
+  interval: 30m
+  timeout: 5m

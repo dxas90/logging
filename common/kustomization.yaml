@@ -1,0 +1,15 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+transformers:
+  - labels.yaml
+# remember to add the base resources to the cluster specific kustomization files
+resources:
+  - ./cert-manager/ks.yaml
+  - ./database
+  - ./external-secrets
+  - ./kube-system
+  - ./monitoring
+  - ./networking
+  - ./kube-tools
+  - ./vault

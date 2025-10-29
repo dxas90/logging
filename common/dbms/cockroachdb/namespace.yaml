@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cockroach-operator-system
+  labels:
+    control-plane: cockroach-operator
+  annotations:
+    volsync.backube/privileged-movers: "true"
+    kustomize.toolkit.fluxcd.io/prune: disabled

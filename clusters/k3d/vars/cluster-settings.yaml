@@ -1,0 +1,29 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-settings
+  namespace: flux-system
+data:
+  TIMEZONE: "Europe/Sofia"
+  CLUSTER_NAME: "k3d"
+  CURRENT_EXTERNAL_IP: "${CURRENT_EXTERNAL_IP}"
+  CURRENT_IP: "${CURRENT_IP}"
+  CIDR_RANGE: "${DOCKER_K3S_GLOBAL_CIDR_RANGE}"
+  START_RANGE: "${DOCKER_K3S_START_RANGE}"
+  END_RANGE: "${DOCKER_K3S_END_RANGE}"
+  METALLB_MEMBERLIST_SECRET: "${METALLB_MEMBERLIST_SECRET}"
+  CUSTOM_COREDNS_ADDR: "10.13.0.10"
+  CUSTOM_CLUSTER_CIDR: "10.21.0.0/16"
+  CUSTOM_SERVICE_CIDR: "10.13.0.0/16"
+  CUSTOM_KUBE_VIP_ADDR: "${DOCKER_K3S_KUBE_VIP_ADDR}"
+  CUSTOM_NODE_CIDR: "${DOCKER_K3S_GLOBAL_CIDR_RANGE}"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kubevip
+  namespace: kube-system
+data:
+  range-global: ${DOCKER_K3S_START_RANGE}-${DOCKER_K3S_END_RANGE}
+  cidr-extra: ${DOCKER_K3S_START_RANGE}/30
