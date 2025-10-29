@@ -58,7 +58,7 @@ spec:
 
     route:
       internal:
-        hostnames: ["alerts.zinn.ca"]
+        hostnames: ["alerts.example.com"]
         parentRefs:
           - name: envoy-internal
             namespace: network

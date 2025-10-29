@@ -23,7 +23,7 @@ endpoints:
       hide-hostname: true
       hide-url: true
     dns:
-      query-name: "status.zinn.ca"
+      query-name: "status.example.com"
       query-type: A
     conditions:
       - "len([BODY]) == 0"
@@ -32,13 +32,13 @@ endpoints:
     url: 1.1.1.1
     interval: 1m
     dns:
-      query-name: "external.zinn.ca"
+      query-name: "external.example.com"
       query-type: A
     conditions:
       - "len([BODY]) > 0"
   - name: flux-webhook
     group: external
-    url: https://flux-receiver.zinn.ca
+    url: https://flux-receiver.example.com
     interval: 1m
     client:
       dns-resolver: tcp://1.1.1.1:53

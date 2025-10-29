@@ -12,4 +12,3 @@ resources:
   - observability
   - networking
   - kube-tools
-  - vault

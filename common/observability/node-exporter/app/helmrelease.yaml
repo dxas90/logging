@@ -34,7 +34,7 @@ spec:
             targetLabel: nodename
           - action: replace
             regex: (.*)
-            replacement: $1.zinn.ca:9100
+            replacement: $1.example.com:9100
             sourceLabels:
               - kubernetes_node
             targetLabel: instance

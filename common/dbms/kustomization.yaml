@@ -7,6 +7,5 @@ resources:
   - namespace.yaml
   # Flux-Kustomizations
   - cloudnative-pg/install.yaml
-  - cockroachdb/install.yaml
   - dragonfly-operator/install.yaml
   - nats/install.yaml

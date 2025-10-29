@@ -93,7 +93,7 @@ spec:
       internal:
         annotations:
           gatus.home-operations.com/enabled: "false"
-        hostnames: ["status.zinn.ca"]
+        hostnames: ["status.example.com"]
         parentRefs:
           - name: envoy-internal
             namespace: network

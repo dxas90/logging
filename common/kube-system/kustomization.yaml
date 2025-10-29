@@ -6,5 +6,5 @@ resources:
   - cilium/install.yaml
   - coredns/install.yaml
   - csi-driver-nfs/install.yaml
-  - external-secrets/install.yaml
+  # - external-secrets/install.yaml
   - metrics-server/install.yaml

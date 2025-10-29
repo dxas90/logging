@@ -20,7 +20,7 @@ spec:
       route:
         enabled: true
         hostnames:
-          - logs.zinn.ca
+          - logs.example.com
         parentRefs:
           - name: envoy-internal
             namespace: network
