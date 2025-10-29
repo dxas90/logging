@@ -6,7 +6,7 @@ metadata:
   name: blackbox-exporter
 spec:
   targetNamespace: observability
-  path: ./kubernetes/main/apps/observability/blackbox-exporter/app
+  path: ./common/observability/blackbox-exporter/app
   sourceRef:
     kind: GitRepository
     name: flux-system

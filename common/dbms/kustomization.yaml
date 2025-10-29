@@ -6,7 +6,7 @@ resources:
   # Pre Flux-Kustomizations
   - namespace.yaml
   # Flux-Kustomizations
-  - cloudnative-pg/ks.yaml
-  - dragonfly-operator/ks.yaml
-  - nats/ks.yaml
-  - cockroachdb
+  - cloudnative-pg/install.yaml
+  - cockroachdb/install.yaml
+  - dragonfly-operator/install.yaml
+  - nats/install.yaml

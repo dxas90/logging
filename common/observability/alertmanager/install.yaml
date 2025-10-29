@@ -6,7 +6,7 @@ metadata:
   name: alertmanager
 spec:
   targetNamespace: observability
-  path: ./kubernetes/main/apps/observability/alertmanager/app
+  path: ./common/observability/alertmanager/app
   sourceRef:
     kind: GitRepository
     name: flux-system

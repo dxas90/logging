@@ -6,7 +6,7 @@ metadata:
   name: silence-operator
 spec:
   targetNamespace: observability
-  path: ./kubernetes/main/apps/observability/silence-operator/app
+  path: ./common/observability/silence-operator/app
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -24,7 +24,7 @@ metadata:
   name: silence-operator-silences
 spec:
   targetNamespace: observability
-  path: ./kubernetes/main/apps/observability/silence-operator/silences
+  path: ./common/observability/silence-operator/silences
   sourceRef:
     kind: GitRepository
     name: flux-system

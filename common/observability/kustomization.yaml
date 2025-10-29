@@ -15,6 +15,7 @@ resources:
   - blackbox-exporter/install.yaml
   - fluent-bit/install.yaml
   - gatus/install.yaml
+  - goldilocks/install.yaml
   - grafana/install.yaml
   - kromgo/install.yaml
   - kube-prometheus-stack/install.yaml
@@ -24,3 +25,4 @@ resources:
   - silence-operator/install.yaml
   - unifi-poller/install.yaml
   - victoria-logs/install.yaml
+  - vpa/install.yaml

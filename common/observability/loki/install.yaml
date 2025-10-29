@@ -6,7 +6,7 @@ metadata:
   name: loki
 spec:
   targetNamespace: observability
-  path: ./kubernetes/main/apps/observability/loki/app
+  path: ./common/observability/loki/app
   sourceRef:
     kind: GitRepository
     name: flux-system

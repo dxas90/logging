@@ -5,11 +5,11 @@ transformers:
   - labels.yaml
 # remember to add the base resources to the cluster specific kustomization files
 resources:
-  - ./cert-manager/ks.yaml
-  - ./database
-  - ./external-secrets
-  - ./kube-system
-  - ./monitoring
-  - ./networking
-  - ./kube-tools
-  - ./vault
+  - cert-manager/install.yaml
+  - dbms
+  - external-secrets/install.yaml
+  - kube-system
+  - observability
+  - networking
+  - kube-tools
+  - vault

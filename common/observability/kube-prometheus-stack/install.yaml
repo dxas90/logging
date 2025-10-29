@@ -6,7 +6,7 @@ metadata:
   name: kube-prometheus-stack
 spec:
   targetNamespace: observability
-  path: ./kubernetes/main/apps/observability/kube-prometheus-stack/app
+  path: ./common/observability/kube-prometheus-stack/app
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -26,7 +26,7 @@ metadata:
   name: kube-prometheus-stack-config
 spec:
   targetNamespace: observability
-  path: ./kubernetes/main/apps/observability/kube-prometheus-stack/config
+  path: ./common/observability/kube-prometheus-stack/config
   sourceRef:
     kind: GitRepository
     name: flux-system

@@ -6,7 +6,7 @@ metadata:
   name: gatus
 spec:
   targetNamespace: observability
-  path: ./kubernetes/main/apps/observability/gatus/app
+  path: ./common/observability/gatus/app
   sourceRef:
     kind: GitRepository
     name: flux-system
