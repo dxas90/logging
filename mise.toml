@@ -1,13 +1,11 @@
 [tools]
 age = "latest"
 direnv = "latest"
-eksctl = "latest"
 flux2 = "latest"
 k3d = "latest"
 kubectl = "latest"
-python = { version='3', virtualenv='.venv' }
+python = { version='3' }
 sops = "latest"
-task = "latest"
 uv = "latest"
 
 [settings]
@@ -19,7 +17,7 @@ python.uv_venv_auto = true
 PROJECT_NAME = "{{ config_root | basename }}"
 
 # Automatic virtualenv activation
-_.python.venv = { path = ".venv", create = true }
+_.python.venv = { path = "/tmp/.venv-{{ env.PROJECT_NAME }}" , create = true }
 LC_ALL = "en_US.UTF-8"
 LC_CTYPE = "en_US.UTF-8"
 DEFAULT_IFACE = "{{ exec(command='ip route | grep default | head -n 1 | cut -d \" \" -f 5') }}"
@@ -28,3 +26,6 @@ CURRENT_EXTERNAL_IP = "{{ exec(command='curl -sSL ipinfo.io/ip') }}"
 SECRET_KEY="{{ exec(command='python3 -c \"import os, base64; print(base64.b64encode(os.urandom(128)).decode())\"') }}"
 SHARED_PATH = "{{ env.HOME }}/projects"
 CLUSTER_NAME = "logging"
+# MacOS specific quick clean commands
+QUICK_ATTR_CLEAN = "{{ exec(command='find . -type f -exec xattr -c {} + || true') }}"
+QUICK_CLEAN = "{{ exec(command='find . -name \"._*\" -delete || true') }}"
