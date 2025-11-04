@@ -5,7 +5,7 @@ metadata:
   name: infra-apps-metallb
   namespace: flux-system
 spec:
-  path: ./infrastructure/k3d/metallb
+  path: ./clusters/k3d/apps/metallb
   prune: true
   sourceRef:
     kind: GitRepository
@@ -25,7 +25,7 @@ spec:
   dependsOn:
     - name: infra-apps-metallb
       namespace: flux-system
-  path: ./infrastructure/k3d/metallb/resources
+  path: ./clusters/k3d/apps/metallb/resources
   prune: true
   sourceRef:
     kind: GitRepository
