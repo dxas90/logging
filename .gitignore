@@ -36,3 +36,5 @@ secretsy-*flux-gitlab.pub
 kubeconfig-flux-gitlab
 secretsy-infra-gitlab-deploy-key
 secretsy-infra-gitlab-deploy-key.pub
+
+._*
