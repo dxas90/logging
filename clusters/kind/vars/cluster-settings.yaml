@@ -25,5 +25,5 @@ metadata:
   name: kubevip
   namespace: kube-system
 data:
-  range-global: ${DOCKER_K3S_START_RANGE}-${DOCKER_K3S_END_RANGE}
-  cidr-extra: ${DOCKER_K3S_START_RANGE}/30
+  range-global: 10.13.0.10-10.13.0.100
+  cidr-extra: 10.13.0.0/30
