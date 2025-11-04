@@ -11,7 +11,7 @@ spec:
     branch: main
   secretRef:
     name: flux-system
-  url: ssh://<REPO>/dxas90/fleet-infra.git
+  url: https://github.com/dxas90/logging.git
   ignore: |
     # exclude all
     /*
@@ -33,10 +33,6 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  decryption:
-    provider: sops
-    secretRef:
-      name: sops-age
   postBuild:
     substituteFrom:
       - kind: ConfigMap
@@ -56,10 +52,6 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  decryption:
-    provider: sops
-    secretRef:
-      name: sops-age
   postBuild:
     substituteFrom:
       - kind: ConfigMap

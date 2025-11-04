@@ -27,5 +27,5 @@ SECRET_KEY="{{ exec(command='python3 -c \"import os, base64; print(base64.b64enc
 SHARED_PATH = "{{ env.HOME }}/projects"
 CLUSTER_NAME = "logging"
 # MacOS specific quick clean commands
-QUICK_ATTR_CLEAN = "{{ exec(command='find . -type f -exec xattr -c {} + || true') }}"
-QUICK_CLEAN = "{{ exec(command='find . -name \"._*\" -delete || true') }}"
+#QUICK_ATTR_CLEAN = "{{ exec(command='find . -type f -exec xattr -c {} + || true') }}"
+#QUICK_CLEAN = "{{ exec(command='find . -name \"._*\" -delete || true') }}"
