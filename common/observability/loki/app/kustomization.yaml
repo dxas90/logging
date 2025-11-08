@@ -5,7 +5,7 @@ kind: Kustomization
 resources:
   - grafanadatasource.yaml
   - ocirepository.yaml
-  - secrets.yaml
+  # - secrets.yaml
   - helmrelease.yaml
   - prometheus-rules.yaml
   - service-monitor.yaml

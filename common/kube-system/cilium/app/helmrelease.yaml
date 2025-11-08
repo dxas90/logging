@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: cilium
-      version: 1.16.5
+      version: 1.18.3
       sourceRef:
         kind: HelmRepository
         name: cilium
@@ -28,84 +28,78 @@ spec:
     autoDirectNodeRoutes: true
     bpf:
       masquerade: true
-    bgp:
-      enabled: false
-    externalWorkloads:
+      # Ref: https://github.com/siderolabs/talos/issues/10002
+      hostLegacyRouting: true
+    cni:
+      # Required for pairing with Multus CNI
+      exclusive: false
+    cgroup:
+      automount:
+        enabled: false
+      hostRoot: /sys/fs/cgroup
+    # NOTE: devices might need to be set if you have more than one active NIC on your hosts
+    # devices: eno+ eth+
+    dashboards:
       enabled: true
-    nodePort:
-      enabled: true
-    cluster:
-      name: home-cluster
-      id: 1
-    containerRuntime:
-      integration: containerd
-      socketPath: /var/run/k3s/containerd/containerd.sock
     endpointRoutes:
       enabled: true
-    hubble:
-      enabled: true
-      metrics:
-        enabled:
-          - dns:query
-          - drop
-          - tcp
-          - flow
-          - port-distribution
-          - icmp
-          - http
+    envoy:
+      rollOutPods: true
+      prometheus:
         serviceMonitor:
           enabled: true
-        dashboards:
-          enabled: true
-          annotations:
-            grafana_folder: Cilium
-      relay:
-        enabled: true
-        rollOutPods: true
-        prometheus:
-          serviceMonitor:
-            enabled: true
-      ui:
-        enabled: true
-        rollOutPods: true
+    gatewayAPI:
+      enabled: true
+    hubble:
+      enabled: false
     ipam:
       mode: kubernetes
-    ipv4NativeRoutingCIDR: "${CUSTOM_CLUSTER_CIDR}"
-    k8sServiceHost: "${CUSTOM_KUBE_VIP_ADDR}"
-    k8sServicePort: 6443
-    kubeProxyReplacement: strict
+    ipv4NativeRoutingCIDR: "10.69.0.0/16"
+    k8sServiceHost: 127.0.0.1
+    k8sServicePort: 7445
+    kubeProxyReplacement: true
     kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
     l2announcements:
       enabled: true
-      # https://github.com/cilium/cilium/issues/26586
-      leaseDuration: 120s
-      leaseRenewDeadline: 60s
-      leaseRetryPeriod: 1s
     loadBalancer:
       algorithm: maglev
-      mode: dsr
+      mode: "dsr"
     localRedirectPolicy: true
     operator:
-      replicas: 1
-      rollOutPods: true
+      dashboards:
+        enabled: true
       prometheus:
         enabled: true
         serviceMonitor:
           enabled: true
-      dashboards:
-        enabled: true
-        annotations:
-          grafana_folder: Cilium
+      replicas: 1
+      rollOutPods: true
     prometheus:
       enabled: true
       serviceMonitor:
         enabled: true
         trustCRDsExist: true
-    dashboards:
-      enabled: true
-      annotations:
-        grafana_folder: Cilium
     rollOutCiliumPods: true
+    routingMode: native
     securityContext:
-      privileged: true
-    tunnel: disabled
+      capabilities:
+        ciliumAgent:
+          - CHOWN
+          - KILL
+          - NET_ADMIN
+          - NET_RAW
+          - IPC_LOCK
+          - SYS_ADMIN
+          - SYS_RESOURCE
+          - PERFMON
+          - BPF
+          - DAC_OVERRIDE
+          - FOWNER
+          - SETGID
+          - SETUID
+        cleanCiliumState:
+          - NET_ADMIN
+          - SYS_ADMIN
+          - SYS_RESOURCE
+    socketLB:
+      hostNamespaceOnly: true

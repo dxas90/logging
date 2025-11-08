@@ -3,7 +3,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: Probe
 metadata:
-  name: nfs
+  name: dns-over-tcp
 spec:
   module: tcp_connect
   prober:
@@ -11,4 +11,4 @@ spec:
   targets:
     staticConfig:
       static:
-        - ragnar.zinn.tech:2049
+        - 8.8.8.8:53

@@ -3,6 +3,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - loki-scrape.yaml
-  # - node-exporter-scrape.yaml
-  # - smartctl-exporter-scrape.yaml
+  - ./grafanadatasource.yaml
+  - ./grafana.yaml
+  - ./httproute.yaml
+  - ./servicemonitor.yaml

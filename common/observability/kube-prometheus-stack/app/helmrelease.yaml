@@ -133,7 +133,7 @@ spec:
           hostnames:
             - "prometheus.example.com"
           parentRefs:
-            - name: envoy-internal
+            - name: traefik-gateway
               namespace: network
       prometheusSpec:
         alertingEndpoints:

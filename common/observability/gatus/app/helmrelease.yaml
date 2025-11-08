@@ -95,7 +95,7 @@ spec:
           gatus.home-operations.com/enabled: "false"
         hostnames: ["status.example.com"]
         parentRefs:
-          - name: envoy-internal
+          - name: traefik-gateway
             namespace: network
     rbac:
       roles:

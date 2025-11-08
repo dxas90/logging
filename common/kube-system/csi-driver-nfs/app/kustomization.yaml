@@ -6,4 +6,4 @@ namespace: kube-system
 resources:
   - helmrepository.yaml
   - helmrelease.yaml
-  - storageclass.yaml
+  # - storageclass.yaml

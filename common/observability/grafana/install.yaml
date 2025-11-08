@@ -3,17 +3,18 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: grafana
+  name: &app grafana
+  namespace: flux-system
 spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   targetNamespace: observability
   path: ./common/observability/grafana/app
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  dependsOn:
-    - name: external-secrets
-      namespace: external-secrets
   prune: true
   wait: true
   interval: 1h
@@ -23,18 +24,18 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: grafana-instance
+  name: &app grafana-instance
+  namespace: flux-system
 spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   targetNamespace: observability
   path: ./common/observability/grafana/instance
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  dependsOn:
-    - name: grafana
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
   interval: 1h
   prune: true
   wait: false

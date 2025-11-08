@@ -31,10 +31,8 @@ dist-ssr
 *.sw?
 
 *-deploy-key
-secretsy-*flux-gitlab
-secretsy-*flux-gitlab.pub
-kubeconfig-flux-gitlab
-secretsy-infra-gitlab-deploy-key
-secretsy-infra-gitlab-deploy-key.pub
+*.pem
+home.sh
+!instance
 
 ._*

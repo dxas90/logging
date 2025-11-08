@@ -6,7 +6,7 @@ components: []
 resources:
   # Pre Flux-Kustomizations
   - namespace.yaml
-  - github.com/grafana/grafana-operator/deploy/kustomize/overlays/cluster_scoped?ref=v5.20.0
+  # - github.com/grafana/grafana-operator/deploy/kustomize/overlays/cluster_scoped?ref=v5.20.0
   # Flux-Kustomizations
   - alertmanager/install.yaml
   - alloy/install.yaml
@@ -19,6 +19,4 @@ resources:
   - loki/install.yaml
   - miscellaneous
   - node-exporter/install.yaml
-  - silence-operator/install.yaml
   - victoria-logs/install.yaml
-  - vpa/install.yaml

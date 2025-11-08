@@ -352,6 +352,14 @@ kubectl create secret generic flux-system \
     --from-file=identity=<PRIVATE_KEY_PATH> \
     --from-file=identity.pub=<PUBLIC_KEY_PATH> \
     --from-literal=known_hosts="$(ssh-keyscan -p <PORT|22> <GIT_REPO_HOST> 2>/dev/null | grep -v '^#')"
+
+kubectl create secret generic flux-system \
+    --namespace=flux-system \
+    --from-file=githubAppPrivateKey=gihub-app-key.pem \
+    --from-literal=githubAppInstallationID="${FLUX_GITHUB_APP_INSTALLATION_ID}" \
+    --from-literal=githubAppID="${FLUX_GITHUB_APP_ID}"
+
+  flux create secret githubapp flux-system --app-id=${FLUX_GITHUB_APP_ID} --app-installation-id=${FLUX_GITHUB_APP_INSTALLATION_ID} --app-private-key=gihub-app-key.pem
 ```
 
 Replace:

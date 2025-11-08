@@ -5,5 +5,4 @@ kind: Kustomization
 resources:
   # - grafanadashboard.yaml
   - ocirepository.yaml
-  - secrets.yaml
   - helmrelease.yaml

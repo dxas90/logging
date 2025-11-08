@@ -1,0 +1,132 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: traefik-values
+  namespace: networking
+data:
+  # https://github.com/traefik/traefik-helm-chart/blob/master/traefik/values.yaml
+  values.yaml: |
+    deployment:
+      # -- Number of pods of the deployment (only applies when kind == Deployment)
+      replicas: 2
+    # Configure Network Ports and EntryPoints
+    # EntryPoints are the network listeners for incoming traffic.
+    ports:
+      # Defines the HTTP entry point named 'web'
+      web:
+        port: 80
+        nodePort: 30000
+        # Instructs this entry point to redirect all traffic to the 'websecure' entry point
+        redirections:
+          entryPoint:
+            to: websecure
+            scheme: https
+            permanent: true
+        forwardedHeaders:
+          trustedIPs:
+            - 127.0.0.1/32
+            - 10.0.0.0/8
+            - 192.168.0.0/16
+            - 172.16.0.0/16
+          insecure: true
+        proxyProtocol:
+          trustedIPs:
+            - 127.0.0.1/32
+            - 10.0.0.0/8
+            - 192.168.0.0/16
+            - 172.16.0.0/16
+          insecure: true
+
+      # Defines the HTTPS entry point named 'websecure'
+      websecure:
+        port: 443
+        nodePort: 30001
+        forwardedHeaders:
+          trustedIPs:
+            - 127.0.0.1/32
+            - 10.0.0.0/8
+            - 192.168.0.0/16
+            - 172.16.0.0/16
+          insecure: true
+        proxyProtocol:
+          trustedIPs:
+            - 127.0.0.1/32
+            - 10.0.0.0/8
+            - 192.168.0.0/16
+            - 172.16.0.0/16
+          insecure: true
+    # Enables the dashboard in Secure Mode
+    api:
+      dashboard: true
+      insecure: true
+
+    ingressRoute:
+      dashboard:
+        enabled: true
+        matchRule: PathPrefix(`/dashboard`) || PathPrefix(`/api`)
+        entryPoints:
+          - web
+        middlewares:
+          - name: dashboard-auth
+
+    service:
+      enabled: true
+      annotations:
+        service.beta.kubernetes.io/aws-load-balancer-eip-allocations: "eipalloc-090256fd461d532e5"
+        service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
+        service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
+        service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+        service.beta.kubernetes.io/aws-load-balancer-type: "external"
+        service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+        service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: preserve_client_ip.enabled=true,proxy_protocol_v2.enabled=true
+
+    # We will route with Gateway API instead.
+    ingressClass:
+      enabled: true
+
+    # Enable Gateway API Provider & Disables the KubernetesIngress provider
+    # Providers tell Traefik where to find routing configuration.
+    providers:
+      kubernetesIngress:
+         enabled: true #https://doc.traefik.io/traefik/reference/routing-configuration/kubernetes/gateway-api/#using-traefik-middleware-as-httproute-filter
+      kubernetesGateway:
+         enabled: true
+
+    ## Gateway Listeners
+    gateway:
+      name: "traefik-gateway"
+      annotations:
+        networking.x-k8s.io/gateway-shard: "default"
+        cert-manager.io/cluster-issuer: "letsencrypt-production"
+        external-dns.alpha.kubernetes.io/target: "enter.default.com"
+      listeners:
+        web:           # HTTP listener that matches entryPoint `web`
+          port: 80
+          protocol: HTTP
+          namespacePolicy:
+            from: All
+
+        websecure:         # HTTPS listener that matches entryPoint `websecure`
+          port: 443
+          protocol: HTTPS  # TLS terminates inside Traefik
+          namespacePolicy:
+            from: All
+          mode: Terminate
+          certificateRefs:
+            - kind: Secret
+              name: default-production-tls  # the Secret we created before the installation
+              group: ""
+
+    # Enable Observability
+    logs:
+      general:
+        level: INFO
+      # This enables access logs, outputting them to Traefik's standard output by default. The [Access Logs Documentation](https://doc.traefik.io/traefik/observability/access-logs/) covers formatting, filtering, and output options.
+      access:
+        enabled: true
+
+    # Enables Prometheus for Metrics
+    metrics:
+      prometheus:
+        enabled: true

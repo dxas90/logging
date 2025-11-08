@@ -3,8 +3,12 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: victoria-logs
+  name: &app victoria-logs
+  namespace: flux-system
 spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   targetNamespace: observability
   path: ./common/observability/victoria-logs/app
   sourceRef:

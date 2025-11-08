@@ -26,6 +26,9 @@ CURRENT_EXTERNAL_IP = "{{ exec(command='curl -sSL ipinfo.io/ip') }}"
 SECRET_KEY="{{ exec(command='python3 -c \"import os, base64; print(base64.b64encode(os.urandom(128)).decode())\"') }}"
 SHARED_PATH = "{{ env.HOME }}/projects"
 CLUSTER_NAME = "logging"
-# MacOS specific quick clean commands
-#QUICK_ATTR_CLEAN = "{{ exec(command='find . -type f -exec xattr -c {} + || true') }}"
-#QUICK_CLEAN = "{{ exec(command='find . -name \"._*\" -delete || true') }}"
+
+[tasks.flux-secret]
+description = "Create GitHub App secret for Flux"
+run = [
+  "kubectl create secret generic flux-system --namespace=flux-system --from-file=githubAppPrivateKey=gihub-app-key.pem --from-literal=githubAppInstallationID=\"{{ env.FLUX_GITHUB_APP_INSTALLATION_ID }}\" --from-literal=githubAppID=\"{{ env.FLUX_GITHUB_APP_ID }}\""
+]

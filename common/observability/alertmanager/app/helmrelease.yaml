@@ -21,7 +21,6 @@ spec:
             - name: storage
               accessMode: ReadWriteOnce
               size: 1Gi
-              storageClass: ceph-block
               globalMounts:
                 - path: /alertmanager
 
@@ -60,7 +59,7 @@ spec:
       internal:
         hostnames: ["alerts.example.com"]
         parentRefs:
-          - name: envoy-internal
+          - name: traefik-gateway
             namespace: network
 
     persistence:

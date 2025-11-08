@@ -7,9 +7,9 @@ metadata:
 spec:
   staticConfigs:
     - targets:
-        - "ragnar.zinn.tech:9100"
-        - "artemis.zinn.tech:9100"
-        - "titan.zinn.tech:9100"
+        - "todo-1:9100"
+        - "todo-2:9100"
+        - "todo-3:9100"
   metricsPath: /metrics
   scheme: HTTP
   relabelings:
