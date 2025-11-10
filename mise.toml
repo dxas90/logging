@@ -58,7 +58,7 @@ description = "Create GitHub App secret for Flux"
 depends = ["cluster-setup"]
 alias = "fs"
 run = [
-  "kubectl create secret generic githubapp-auth --namespace=flux-system --from-file=githubAppPrivateKey=gihub-app-key.pem --from-literal=githubAppInstallationID=\"{{ env.FLUX_GITHUB_APP_INSTALLATION_ID }}\" --from-literal=githubAppID=\"{{ env.FLUX_GITHUB_APP_ID }}\"",
+  "kubectl create secret generic githubapp-auth --namespace=flux-system --from-file=githubAppPrivateKey=gihub-app-key.pem --from-literal=githubAppInstallationID=\"{{ env.FLUX_GITHUB_APP_INSTALLATION_ID }}\" --from-literal=githubAppID=\"{{ env.FLUX_GITHUB_APP_ID }}\" || true",
   "kubectl annotate secret githubapp-auth -n flux-system source.toolkit.fluxcd.io/provider=github --overwrite"
 ]
 
