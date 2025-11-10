@@ -77,3 +77,10 @@ alias = "c3s"
 run = [
   "kubectl apply -k clusters/k3s",
 ]
+
+[tasks.sync]
+description = "Sync local changes to the cluster"
+alias = "s"
+run = [
+  "flux reconcile source git flux-system ; flux reconcile ks -n flux-system cluster --with-source"
+]
