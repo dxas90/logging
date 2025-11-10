@@ -9,7 +9,7 @@ spec:
   interval: 1h
   chart:
     spec:
-      chart: bjw-s/app-template
+      chart: app-template
       version: 4.4.0
       sourceRef:
         kind: HelmRepository
