@@ -12,6 +12,7 @@ spec:
   url: https://github.com/dxas90/logging.git
   secretRef:
     name: githubapp-auth
+  provider: github
   ignore: |
     # exclude all
     /*

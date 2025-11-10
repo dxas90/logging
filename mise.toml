@@ -48,13 +48,15 @@ echo "Secrets cached in .mise.local.toml"
 
 [tasks.cluster-setup]
 description = "Setup Flux in the cluster"
+alias = 'cs' # `mise run cs`
 run = [
   "kubectl apply -k bootstrap",
 ]
 
 [tasks.flux-secret]
 description = "Create GitHub App secret for Flux"
-# depends = ["cluster-setup"]
+depends = ["cluster-setup"]
+alias = "fs"
 run = [
   "kubectl create secret generic githubapp-auth --namespace=flux-system --from-file=githubAppPrivateKey=gihub-app-key.pem --from-literal=githubAppInstallationID=\"{{ env.FLUX_GITHUB_APP_INSTALLATION_ID }}\" --from-literal=githubAppID=\"{{ env.FLUX_GITHUB_APP_ID }}\"",
   "kubectl annotate secret githubapp-auth -n flux-system source.toolkit.fluxcd.io/provider=github --overwrite"
@@ -63,6 +65,7 @@ run = [
 [tasks.cluster-kind-setup]
 description = "Setup kind cluster with Flux"
 depends = ["flux-secret"]
+alias = "cks"
 run = [
   "kubectl apply -k clusters/kind",
 ]
@@ -70,6 +73,7 @@ run = [
 [tasks.cluster-k3s-setup]
 depends = ["flux-secret"]
 description = "Setup k3s cluster with Flux"
+alias = "c3s"
 run = [
   "kubectl apply -k clusters/k3s",
 ]
