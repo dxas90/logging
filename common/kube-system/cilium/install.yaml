@@ -10,7 +10,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   targetNamespace: kube-system
-  path: ./kubernetes/main/apps/kube-system/cilium/app
+  path: ./common/kube-system/cilium/app
   sourceRef:
     kind: GitRepository
     name: flux-system

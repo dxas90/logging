@@ -9,7 +9,6 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  targetNamespace: node-feature-discovery
   path: ./common/kube-tools/node-feature-discovery/app
   sourceRef:
     kind: GitRepository
