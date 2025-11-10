@@ -34,7 +34,7 @@ common/                    # Shared infrastructure applications
 1. **Repository Co-location** (NEW PATTERN):
    ```yaml
    # app/helmrepository.yaml or app/ocirepository.yaml
-   apiVersion: source.toolkit.fluxcd.io/v1beta2
+   apiVersion: source.toolkit.fluxcd.io/v1
    kind: HelmRepository  # or OCIRepository
    ```
 

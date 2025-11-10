@@ -5,6 +5,7 @@ resources:
   - ../common/cert-manager
   # - ../common/dbms
   - ../common/external-secrets
+  - ../common/default
   - ../common/keda
   - ../common/istio-system
   # - ../common/kube-tools

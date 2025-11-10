@@ -7,6 +7,7 @@ transformers:
 resources:
   - cert-manager/install.yaml
   - dbms
+  - default
   - external-secrets/install.yaml
   - istio-system
   - keda
