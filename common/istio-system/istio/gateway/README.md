@@ -35,7 +35,7 @@ common/istio-system/
 
 ### Gateway Specification
 
-**Location**: `common/istio-system/gateway/app/gateway.yaml`
+**Location**: `common/istio-system/istio/gateway/gateway.yaml`
 
 ```yaml
 apiVersion: gateway.networking.k8s.io/v1
@@ -85,7 +85,7 @@ metadata:
   name: istio-gateway
   namespace: flux-system
 spec:
-  path: ./common/istio-system/gateway/app
+  path: ./common/istio-system/istio/gateway
   targetNamespace: istio-system
   dependsOn:
     - name: istio  # Ensures Istio is installed first
@@ -277,7 +277,7 @@ kubectl get certificate -n cert-manager
 
 To add additional listeners or modify settings:
 
-1. Edit `common/istio-system/gateway/app/gateway.yaml`
+1. Edit `common/istio-system/istio/gateway/gateway.yaml`
 2. Commit changes to Git
 3. FluxCD reconciles automatically (interval: 1h, or manual trigger)
 

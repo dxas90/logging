@@ -23,7 +23,7 @@ Deployment & debugging commands (use when validating edits):
 
 Patterns & examples (copy/paste safe)
 - App layout (example): `common/observability/grafana/app/{kustomization.yaml,ocirepository.yaml,helmrelease.yaml}` and `common/observability/grafana/install.yaml`.
-- Gateway / Istio: Gateway resource lives at `common/istio-system/gateway/app/gateway.yaml`. HTTPRoute parentRefs must point to name `external` and namespace `istio-system` and match listener sectionName (http/https).
+- Gateway / Istio: Gateway resource lives at `common/istio-system/istio/gateway/gateway.yaml`. HTTPRoute parentRefs must point to name `external` and namespace `istio-system` and match listener sectionName (http/https).
 
 Integration points & external deps
 - Flux controllers (source, kustomize, helm) manage reconciliation.
