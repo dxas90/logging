@@ -9,7 +9,6 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  targetNamespace: external-secrets
   path: ./common/external-secrets/external-secrets/app
   sourceRef:
     kind: GitRepository
