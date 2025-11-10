@@ -9,7 +9,7 @@ data:
   values.yaml: |
     deployment:
       # -- Number of pods of the deployment (only applies when kind == Deployment)
-      replicas: 2
+      replicas: 1
     # Configure Network Ports and EntryPoints
     # EntryPoints are the network listeners for incoming traffic.
     ports:
