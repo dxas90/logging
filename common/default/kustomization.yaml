@@ -5,4 +5,4 @@ kind: Kustomization
 namespace: default
 resources:
   - namespace.yaml
-  - ./echo/ks.yaml
+  - ./echo/install.yaml
