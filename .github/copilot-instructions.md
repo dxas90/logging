@@ -1,3 +1,53 @@
+# GitOps FluxCD infrastructure — AI assistant notes
+
+Purpose: give concise, repo-specific guidance so an AI coding agent can make correct, low-risk edits.
+
+Top-level architecture (quick): this repo is FluxCD + Kustomize driven. Key dirs:
+- `bootstrap/` — minimal FluxCD bootstrap (do not add application installs here).
+- `clusters/<type>/vars/` — cluster-settings.yaml and SOPS-encrypted cluster-secrets.yaml (per-cluster overrides).
+- `common/<category>/<app>/` — application installs. Each app follows the co-located pattern below.
+
+Core conventions you must follow
+- Co-located repositories: every app MUST place `app/helmrepository.yaml` or `app/ocirepository.yaml` next to `app/helmrelease.yaml` and `app/kustomization.yaml`.
+- `install.yaml` CRs (in `common/<category>/<app>/install.yaml`) must use spec.path relative to repo root: `./common/<category>/<app>/app` (never `./kubernetes/main/...`).
+- Secrets: use SOPS (`*.sops.yaml`) and store cluster keys in `clusters/<type>/vars/cluster-secrets.yaml`. Do not commit plaintext secrets.
+
+Deployment & debugging commands (use when validating edits):
+- Bootstrap Flux: `kubectl apply --kustomize bootstrap`
+- Apply a cluster: `kubectl apply --kustomize clusters/k3d` (replace k3d)
+- Flux status / reconcile:
+  - `flux get kustomizations`
+  - `flux get helmreleases`
+  - `flux reconcile kustomization <name>`
+  - `kubectl describe helmrelease <app> -n <namespace>`
+
+Patterns & examples (copy/paste safe)
+- App layout (example): `common/observability/grafana/app/{kustomization.yaml,ocirepository.yaml,helmrelease.yaml}` and `common/observability/grafana/install.yaml`.
+- Gateway / Istio: Gateway resource lives at `common/istio-system/gateway/app/gateway.yaml`. HTTPRoute parentRefs must point to name `external` and namespace `istio-system` and match listener sectionName (http/https).
+
+Integration points & external deps
+- Flux controllers (source, kustomize, helm) manage reconciliation.
+- SOPS + age for secret encryption; External Secrets Operator and Vault integrations present.
+
+Editing rules for AI agents (must obey)
+1. Never add or modify secrets inline; create `.sops.yaml` encrypted file or update `clusters/*/vars/cluster-secrets.yaml`.
+2. Follow co-located repository pattern; if you must migrate a legacy `repositories/` entry, also add the matching `install.yaml` and update parent kustomization.
+3. Keep `bootstrap/` minimal — no application kustomizations there.
+4. When changing an `install.yaml` path, update the parent category `kustomization.yaml` to include the new `install.yaml`.
+
+Files to inspect first (priority):
+- `common/README.md` — app patterns
+- `README.md` (repo root) — quick start, bootstrapping and SOPS usage
+- `bootstrap/README.md` and `clusters/*/vars/*.yaml` for cluster-specific behavior
+
+Validation & notes for PRs
+- If a change affects runtime, include a short validation note in the PR body listing the Flux/kubectl commands you ran (e.g. `flux reconcile ...`, `kubectl describe ...`).
+- Prefer configuration-only, low-risk edits when keys or runtime access are missing.
+
+When blocked
+- If a change needs the SOPS age key or Git deploy key, stop and request the secret (do not attempt to guess or create one).
+
+Offer to add: a PR checklist template (reconcile + SOPS checks) if the maintainer wants it.
 # GitOps Kubernetes Infrastructure - AI Coding Assistant Instructions
 
 ## 🏗️ Architecture Overview
