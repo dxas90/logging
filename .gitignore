@@ -34,5 +34,6 @@ dist-ssr
 *.pem
 home.sh
 !instance
+.mise.local.toml
 
 ._*

@@ -10,6 +10,8 @@ spec:
   ref:
     branch: main
   url: https://github.com/dxas90/logging.git
+  secretRef:
+    name: github-app-secret
   ignore: |
     # exclude all
     /*
