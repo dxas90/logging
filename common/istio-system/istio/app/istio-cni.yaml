@@ -3,6 +3,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: &app istio-cni
+  namespace: istio-system
 spec:
   interval: 15m
   targetNamespace: istio-system
