@@ -9,7 +9,6 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  targetNamespace: kyverno
   path: ./common/kube-tools/kyverno/app
   sourceRef:
     kind: GitRepository

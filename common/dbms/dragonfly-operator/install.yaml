@@ -9,7 +9,6 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  targetNamespace: database
   path: ./common/dbms/dragonfly-operator/app
   sourceRef:
     kind: GitRepository
