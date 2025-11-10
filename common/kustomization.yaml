@@ -8,7 +8,9 @@ resources:
   - cert-manager/install.yaml
   - dbms
   - external-secrets/install.yaml
+  - istio-system
+  - keda
   - kube-system
-  - observability
-  - networking
   - kube-tools
+  - networking
+  - observability
