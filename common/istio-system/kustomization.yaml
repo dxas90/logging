@@ -4,4 +4,3 @@ kind: Kustomization
 resources:
   - ./namespace.yaml
   - ./istio/install.yaml
-  - ./gateway/install.yaml
