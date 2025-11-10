@@ -71,7 +71,7 @@ spec:
         hostnames: ["{{ .Release.Name }}.example.com"]
         parentRefs:
           - name: external
-            namespace: kube-system
+            namespace: istio-system
             sectionName: https
         rules:
           - backendRefs:
