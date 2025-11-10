@@ -5,11 +5,10 @@ metadata:
   name: &app istio
   namespace: flux-system
 spec:
-  targetNamespace: istio-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/istio-system/istio/app
+  path: ./common/istio-system/istio/app
   prune: true
   sourceRef:
     kind: GitRepository
