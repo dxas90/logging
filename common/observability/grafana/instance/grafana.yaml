@@ -30,7 +30,7 @@ spec:
     server:
       enable_gzip: "true"
       root_url: https://grafana.example.com
-  disableDefaultAdminSecret: true
+  # disableDefaultAdminSecret: true
   deployment:
     spec:
       strategy:
