@@ -5,6 +5,7 @@ metadata:
   name: &app ztunnel
 spec:
   interval: 15m
+  targetNamespace: istio-system
   chart:
     spec:
       chart: ztunnel

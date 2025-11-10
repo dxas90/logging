@@ -5,6 +5,7 @@ metadata:
   name: &app istio-cni
 spec:
   interval: 15m
+  targetNamespace: istio-system
   chart:
     spec:
       chart: cni
