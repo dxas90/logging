@@ -1,0 +1,22 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/kubernetes/kubernetes/master/api/openapi-spec/v3/apis__gateway.networking.k8s.io__v1_openapi.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: external
+  namespace: istio-system
+spec:
+  gatewayClassName: istio
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: All
+    - name: https
+      protocol: HTTP  # Changed to HTTP for local dev (no TLS)
+      port: 443
+      allowedRoutes:
+        namespaces:
+          from: All
