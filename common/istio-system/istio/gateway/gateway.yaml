@@ -5,6 +5,10 @@ kind: Gateway
 metadata:
   name: external
   namespace: istio-system
+  annotations:
+    # This gateway is deployed on the Hetzner control plane node
+    # accessible via Slack Nebula overlay network
+    description: "External ingress gateway for web applications"
 spec:
   gatewayClassName: istio
   listeners:
@@ -15,8 +19,14 @@ spec:
         namespaces:
           from: All
     - name: https
-      protocol: HTTP  # Changed to HTTP for local dev (no TLS)
+      protocol: HTTPS
       port: 443
       allowedRoutes:
         namespaces:
           from: All
+      # Uncomment and configure TLS when ready
+      # tls:
+      #   mode: Terminate
+      #   certificateRefs:
+      #     - name: gateway-tls
+      #       kind: Secret

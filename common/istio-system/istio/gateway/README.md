@@ -2,35 +2,66 @@
 
 ## Overview
 
-This document describes how to configure Istio Gateway API for ingress traffic management in this GitOps infrastructure.
+This Istio installation is configured for a **K3s cluster deployed over Slack Nebula overlay network**, with the ingress gateway specifically deployed on the **Hetzner control plane node** which has the easiest internet access.
 
 ## Architecture
 
 ### Components
 
-1. **Istio Control Plane** (`common/istio-system/istio/`)
-   - Manages service mesh and gateway controller
-   - Provides GatewayClasses: `istio`, `istio-remote`, `istio-waypoint`
+1. **Istio Ambient Mesh** (`common/istio-system/istio/`)
+   - Using ambient profile with CNI and ztunnel
+   - Control plane: istiod
+   - Ingress Gateway: Deployed on Hetzner control plane node
 
-2. **Gateway Resource** (`common/istio-system/gateway/`)
+2. **Gateway Resource** (`common/istio-system/istio/gateway/`)
    - Defines ingress entry points for the cluster
    - Configured with HTTP (port 80) and HTTPS (port 443) listeners
    - Allows HTTPRoutes from all namespaces
 
-3. **HTTPRoute Resources** (per-application in `common/<category>/<app>/`)
+3. **Ingress Gateway Deployment**
+   - **Node Affinity**: Scheduled on control plane node (`node-role.kubernetes.io/control-plane: "true"`)
+   - **Service Type**: NodePort for easy access via Nebula network
+     - HTTP: NodePort 30080 → Port 80
+     - HTTPS: NodePort 30443 → Port 443
+   - **Tolerations**: Tolerates control plane taints
+
+4. **HTTPRoute Resources** (per-application in `common/<category>/<app>/`)
    - Define routing rules for specific applications
    - Reference the Gateway in their `parentRefs` configuration
+
+## Access Points
+
+The ingress gateway is accessible via the Hetzner control plane node:
+
+```bash
+# HTTP traffic
+http://<hetzner-node-ip>:30080
+
+# HTTPS traffic (when TLS is configured)
+https://<hetzner-node-ip>:30443
+```
+
+To get the node IP:
+```bash
+kubectl get nodes -o wide
+```
 
 ## Gateway Configuration
 
 ### File Structure
 ```
-common/istio-system/
-├── gateway/
-│   ├── install.yaml              # FluxCD Kustomization
-│   └── app/
-│       ├── kustomization.yaml    # App resources
-│       └── gateway.yaml          # Gateway resource definition
+common/istio-system/istio/
+├── app/
+│   ├── istio-base.yaml              # Istio CRDs
+│   ├── istio-istiod.yaml            # Control plane
+│   ├── istio-cni.yaml               # CNI plugin
+│   ├── istio-ztunnel.yaml           # Ztunnel for ambient
+│   ├── istio-ingressgateway.yaml    # Ingress gateway (NEW)
+│   └── kustomization.yaml
+└── gateway/
+    ├── gateway.yaml                  # Gateway resource
+    ├── example-httproute.yaml        # Example routing
+    └── kustomization.yaml
 ```
 
 ### Gateway Specification
