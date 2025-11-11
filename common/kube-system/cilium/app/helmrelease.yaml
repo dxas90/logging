@@ -51,19 +51,23 @@ spec:
     gatewayAPI:
       enabled: true
     hubble:
-      enabled: false
+      enabled: true
     ipam:
       mode: kubernetes
-    ipv4NativeRoutingCIDR: "10.69.0.0/16"
-    k8sServiceHost: 127.0.0.1
-    k8sServicePort: 7445
+    ipv4NativeRoutingCIDR: "10.93.0.0/16"
+    # Removed explicit k8sServiceHost/k8sServicePort to prefer in-cluster
+    # Kubernetes API service discovery. If your environment requires an
+    # explicit API endpoint for Cilium agents, re-add these values and set
+    # them to the cluster IP or a reachable control-plane address.
+    # k8sServiceHost: 10.37.97.250
+    # k8sServicePort: 6443
     kubeProxyReplacement: true
     kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
     l2announcements:
-      enabled: true
+      enabled: false
     loadBalancer:
       algorithm: maglev
-      mode: "dsr"
+      mode: "snat"
     localRedirectPolicy: true
     operator:
       dashboards:
@@ -101,5 +105,3 @@ spec:
           - NET_ADMIN
           - SYS_ADMIN
           - SYS_RESOURCE
-    socketLB:
-      hostNamespaceOnly: true
