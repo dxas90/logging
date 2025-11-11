@@ -25,7 +25,10 @@ spec:
   uninstall:
     keepHistory: false
   values:
-    autoDirectNodeRoutes: true
+    autoDirectNodeRoutes: false
+    underlayProtocol: "IPv4"
+    tunnelProtocol: "VXLAN"
+    routingMode: "tunnel"
     bpf:
       masquerade: true
       # Ref: https://github.com/siderolabs/talos/issues/10002
@@ -33,12 +36,14 @@ spec:
     cni:
       # Required for pairing with Multus CNI
       exclusive: false
+      chainingMode: "none"
     cgroup:
       automount:
         enabled: false
       hostRoot: /sys/fs/cgroup
     # NOTE: devices might need to be set if you have more than one active NIC on your hosts
-    # devices: eno+ eth+
+    devices: nebula+
+    nodeinit: true
     dashboards:
       enabled: true
     endpointRoutes:
@@ -54,7 +59,11 @@ spec:
       enabled: true
     ipam:
       mode: kubernetes
+      operator:
+        clusterPoolIPv4PodCIDRList: "10.93.0.0/16"
     ipv4NativeRoutingCIDR: "10.93.0.0/16"
+    nodePort:
+      enabled: true
     # Removed explicit k8sServiceHost/k8sServicePort to prefer in-cluster
     # Kubernetes API service discovery. If your environment requires an
     # explicit API endpoint for Cilium agents, re-add these values and set
@@ -84,7 +93,6 @@ spec:
         enabled: true
         trustCRDsExist: true
     rollOutCiliumPods: true
-    routingMode: native
     securityContext:
       capabilities:
         ciliumAgent:
