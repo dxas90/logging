@@ -1,0 +1,55 @@
+# helm upgrade --install cilium cilium/cilium --namespace kube-system -f cilium.yaml --version 1.18.3
+---
+kubeProxyReplacement: true
+routingMode: tunnel
+tunnelProtocol: vxlan
+underlayProtocol: ipv4
+autoDirectNodeRoutes: false
+ipam:
+  mode: kubernetes
+  operator:
+    clusterPoolIPv4PodCIDRList:
+      - 10.93.0.0/16
+nodePort:
+  enabled: true
+bpf:
+  masquerade: true
+devices: "nebula+"
+gatewayAPI:
+  enabled: true
+hubble:
+  enabled: true
+nodeinit:
+  enabled: true
+cni:
+  chainingMode: none
+ipv4:
+  enabled: true
+ipv6:
+  enabled: false
+cluster:
+  name: hetzner
+  id: 1
+serviceAccounts:
+  enabled: true
+l2announcements:
+  enabled: false
+loadBalancer:
+  algorithm: maglev
+  mode: "snat"
+operator:
+  dashboards:
+    enabled: true
+  prometheus:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+  replicas: 1
+  rollOutPods: true
+prometheus:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    trustCRDsExist: true
+k8sServiceHost: 10.37.97.250
+k8sServicePort: 6443

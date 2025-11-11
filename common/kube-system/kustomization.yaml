@@ -5,7 +5,7 @@ transformers:
   - labels.yaml
 resources:
   - namespace.yaml
-  - cilium/install.yaml
+  # - cilium/install.yaml
   - coredns/install.yaml
   - csi-driver-nfs/install.yaml
   - reloader/install.yaml

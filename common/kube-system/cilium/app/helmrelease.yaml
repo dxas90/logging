@@ -43,7 +43,8 @@ spec:
       hostRoot: /sys/fs/cgroup
     # NOTE: devices might need to be set if you have more than one active NIC on your hosts
     devices: nebula+
-    nodeinit: true
+    nodeinit:
+      enabled: true
     dashboards:
       enabled: true
     endpointRoutes:
