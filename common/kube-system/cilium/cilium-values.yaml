@@ -1,43 +1,66 @@
-# helm upgrade --install cilium cilium/cilium --namespace kube-system -f cilium.yaml --version 1.18.3
-# https://github.com/cilium/cilium/blob/v1.18.3/install/kubernetes/cilium/values.yaml
+# helm upgrade --install cilium cilium/cilium --namespace kube-system -f common/kube-system/cilium/cilium-values.yaml --version 1.18.4
+# https://github.com/cilium/cilium/blob/v1.18.4/install/kubernetes/cilium/values.yaml
+# kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/standard-install.yaml
+# kubectl apply -f https://github.com/prometheus-operator/prometheus-operator/releases/download/v0.86.1/stripped-down-crds.yaml
 ---
 kubeProxyReplacement: true
+
 routingMode: tunnel
 tunnelProtocol: vxlan
 underlayProtocol: ipv4
+
 autoDirectNodeRoutes: false
+
+enableIPv4Masquerade: true
+enableIPv6Masquerade: false
+localRedirectPolicy: true
+
+externalIPs:
+  enabled: true
+
 ipam:
   mode: kubernetes
   operator:
     clusterPoolIPv4PodCIDRList:
       - 10.93.0.0/16
+
 nodePort:
   enabled: true
+
 bpf:
   masquerade: true
-devices: "nebula+"
+
 gatewayAPI:
   enabled: true
+
 hubble:
   enabled: true
+
 nodeinit:
   enabled: true
+
 cni:
   chainingMode: none
+
 ipv4:
   enabled: true
 ipv6:
   enabled: false
+
 cluster:
   name: hetzner
   id: 1
+
 serviceAccounts:
   enabled: true
+
 l2announcements:
   enabled: false
+
 loadBalancer:
   algorithm: maglev
-  mode: "snat"
+  mode: snat
+
 operator:
   dashboards:
     enabled: true
@@ -47,10 +70,5 @@ operator:
       enabled: true
   replicas: 1
   rollOutPods: true
-prometheus:
-  enabled: true
-  serviceMonitor:
-    enabled: true
-    trustCRDsExist: true
 k8sServiceHost: 10.37.97.250
 k8sServicePort: 6443
