@@ -1,4 +1,5 @@
 # helm upgrade --install cilium cilium/cilium --namespace kube-system -f cilium.yaml --version 1.18.3
+# https://github.com/cilium/cilium/blob/v1.18.3/install/kubernetes/cilium/values.yaml
 ---
 kubeProxyReplacement: true
 routingMode: tunnel
