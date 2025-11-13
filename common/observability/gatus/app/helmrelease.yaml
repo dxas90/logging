@@ -35,7 +35,7 @@ spec:
       maintenance:
         start: 07:58
         duration: 40m
-        timezone: "Europe/Warsaw"
+        timezone: "Europe/Athens"
       storage:
         type: sqlite
       metrics: true
