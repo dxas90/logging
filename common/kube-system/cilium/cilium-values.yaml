@@ -6,14 +6,20 @@
 kubeProxyReplacement: true
 
 routingMode: tunnel
+autoDirectNodeRoutes: false
 tunnelProtocol: vxlan
 underlayProtocol: ipv4
 
-autoDirectNodeRoutes: false
+MTU: 1300
+
+devices: nebula+
 
 enableIPv4Masquerade: true
 enableIPv6Masquerade: false
 localRedirectPolicy: true
+
+egressGateway:
+  enabled: true
 
 externalIPs:
   enabled: true
@@ -29,7 +35,8 @@ nodePort:
 
 bpf:
   masquerade: true
-
+masquerade:
+  external: true
 gatewayAPI:
   enabled: true
 
