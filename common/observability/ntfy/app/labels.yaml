@@ -1,0 +1,11 @@
+apiVersion: builtin
+kind: LabelTransformer
+metadata:
+  name: labels
+labels:
+  app.kubernetes.io/name: ntfy
+  app.kubernetes.io/instance: ntfy
+  app.kubernetes.io/usage: observability
+fieldSpecs:
+  - path: metadata/labels
+    create: true

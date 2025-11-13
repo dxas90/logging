@@ -18,4 +18,5 @@ resources:
   - loki/install.yaml
   - miscellaneous
   - node-exporter/install.yaml
+  - ntfy/install.yaml
   - victoria-logs/install.yaml

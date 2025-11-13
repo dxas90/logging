@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ntfy
+spec:
+  revisionHistoryLimit: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ntfy
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ntfy
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        fsGroupChangePolicy: OnRootMismatch
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: ntfy
+          image: binwiederhier/ntfy:v2.14.0@sha256:5a051798d14138c3ecb12c038652558ab6a077e1aceeb867c151cbf5fa8451ef
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          args: ["serve"]
+          env:
+            - name: TZ
+              value: "Europe/Berlin"
+          ports:
+            - containerPort: 80
+              name: http
+              protocol: TCP
+          resources:
+            limits:
+              memory: 300Mi
+            requests:
+              cpu: 150m
+              memory: 150Mi
+          volumeMounts:
+            - name: config
+              mountPath: /etc/ntfy/server.yml
+              subPath: server.yml
+              readOnly: true
+            - name: cache
+              mountPath: /var/cache/ntfy
+      volumes:
+        - name: config
+          configMap:
+            name: server-config
+        - name: cache
+          emptyDir: {}
