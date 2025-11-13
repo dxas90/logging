@@ -12,7 +12,7 @@ spec:
   targetNamespace: monitoring
   interval: 30m
   timeout: 5m
-  path: ./kubernetes/apps/gatus/app
+  path: ./common/observability/gatus/app
   prune: true
   sourceRef:
     kind: GitRepository
