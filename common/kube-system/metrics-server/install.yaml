@@ -9,8 +9,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  targetNamespace: kube-system
-  path: ./kubernetes/main/apps/kube-system/metrics-server/app
+  path: ./common/kube-system/metrics-server/app
   sourceRef:
     kind: GitRepository
     name: flux-system
