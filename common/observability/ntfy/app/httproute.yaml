@@ -10,8 +10,9 @@ spec:
     - ntfy.example.com
   parentRefs:
     - kind: Gateway
-      name: private
-      namespace: envoy-gateway-system
+      name: external
+      namespace: istio-system
+      sectionName: http  # or https for TLS traffic
   rules:
     - backendRefs:
         - kind: Service
