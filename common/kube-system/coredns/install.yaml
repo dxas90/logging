@@ -9,7 +9,6 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  targetNamespace: kube-system
   path: ./common/kube-system/coredns/app
   sourceRef:
     kind: GitRepository
