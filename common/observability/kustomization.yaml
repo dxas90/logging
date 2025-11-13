@@ -12,6 +12,7 @@ resources:
   - alloy/install.yaml
   - blackbox-exporter/install.yaml
   - fluent-bit/install.yaml
+  - gatus/install.yaml
   - grafana/install.yaml
   - kube-prometheus-stack/install.yaml
   - loki/install.yaml
