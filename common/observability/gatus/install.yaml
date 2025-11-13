@@ -9,7 +9,6 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  targetNamespace: monitoring
   interval: 30m
   timeout: 5m
   path: ./common/observability/gatus/app
