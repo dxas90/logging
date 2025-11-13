@@ -15,7 +15,9 @@ spec:
         kind: HelmRepository
         name: gatus-chart
         namespace: flux-system
-  values:
+  values: # https://github.com/TwiN/helm-charts/blob/master/charts/gatus/values.yaml
+    persistence:
+      enabled: true
     deployment:
       strategy: RollingUpdate
       annotateConfigChecksum: true
@@ -36,8 +38,6 @@ spec:
         start: 07:58
         duration: 40m
         timezone: "Europe/Athens"
-      storage:
-        type: sqlite
       metrics: true
       ui:
         title: Health Status
