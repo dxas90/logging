@@ -7,7 +7,7 @@ resources:
   # Pre Flux-Kustomizations
   - namespace.yaml
   # Flux-Kustomizations
-  - alertmanager/install.yaml
+  # - alertmanager/install.yaml # ok
   - alloy/install.yaml
   # - blackbox-exporter/install.yaml # ok
   - grafana/install.yaml

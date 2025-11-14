@@ -5,4 +5,5 @@ kind: Kustomization
 resources:
   - loki.yaml
   - prometheus.yaml
+  # - alertmanager.yaml
   # - tempo.yaml
