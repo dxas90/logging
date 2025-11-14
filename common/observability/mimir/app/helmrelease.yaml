@@ -26,19 +26,20 @@ spec:
       replicas: 1
     querier:
       replicas: 1
-    # alertmanager:
-    #   persistentVolume:
-    #     storageClass: longhorn
+    alertmanager:
+      persistentVolume:
+        enabled: true
+      replicas: 1
     ingester:
-      replicas: 2
+      replicas: 1
       zoneAwareReplication:
         enabled: false
       persistentVolume:
         # storageClass: longhorn
-        size: 7Gi
+        size: 5Gi
       resources:
         limits:
-          memory: 2Gi
+          memory: 1Gi
     store_gateway:
       zoneAwareReplication:
         enabled: false
@@ -47,4 +48,6 @@ spec:
     compactor:
       persistentVolume:
         # storageClass: longhorn
-        size: 2Gi
+        size: 1Gi
+    distributor:
+      replicas: 1
