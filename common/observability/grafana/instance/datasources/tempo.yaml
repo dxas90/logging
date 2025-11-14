@@ -15,5 +15,5 @@ spec:
     isDefault: false
     url: http://tempo.observability.svc.cluster.local:3200
   plugins:
-    - name: grafana-traces-app
+    - name: grafana-exploretraces-app
       version: "latest"
