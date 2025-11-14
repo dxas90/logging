@@ -2,12 +2,12 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ../common/cert-manager
+  # - ../common/cert-manager
   # - ../common/dbms
   # - ../common/default
-  - ../common/external-secrets
-  - ../common/istio-system
-  - ../common/keda
+  # - ../common/external-secrets
+  # - ../common/istio-system
+  # - ../common/keda
   - ../common/kube-system
   # - ../common/kube-tools
   # - ../common/networking
