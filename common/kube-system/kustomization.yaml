@@ -7,6 +7,6 @@ resources:
   - namespace.yaml
   # - cilium/install.yaml
   # - coredns/install.yaml
-  - csi-driver-nfs/install.yaml
+  # - csi-driver-nfs/install.yaml
   - reloader/install.yaml
   - metrics-server/install.yaml
