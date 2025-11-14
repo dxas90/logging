@@ -57,8 +57,8 @@ spec:
       structuredConfig:
         ruler:
           enable_api: true
-          enable_alertmanager_v2: true
-          alertmanager_url: http://alertmanager-operated.observability.svc.cluster.local:9093
+          enable_alertmanager_v2: false
+          alertmanager_url: http://alertmanager-operated.observability.svc.cluster.local:9093 # Adjust if Alertmanager is enabled
           storage:
             type: local
             local:

@@ -14,10 +14,9 @@ resources:
   # - fluent-bit/install.yaml
   - gatus/install.yaml
   - grafana/install.yaml
-  # - kube-prometheus-stack/install.yaml
+  - kube-prometheus-stack/install.yaml
   - loki/install.yaml
-  - mimir/install.yaml
-  - miscellaneous
+  # - mimir/install.yaml
   - node-exporter/install.yaml
   - tempo/install.yaml
   - ntfy/install.yaml
