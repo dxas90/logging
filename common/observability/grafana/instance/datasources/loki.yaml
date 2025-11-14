@@ -14,3 +14,6 @@ spec:
     access: proxy
     isDefault: false
     url: http://loki-headless.observability.svc.cluster.local:3100
+  plugins:
+    - name: grafana-lokiexplore-app
+      version: "latest"
