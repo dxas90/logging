@@ -6,5 +6,5 @@ transformers:
 resources:
   - namespace.yaml
   - traefik/install.yaml
-#  - external-dns/install.yaml
+  - external-dns/install.yaml
 

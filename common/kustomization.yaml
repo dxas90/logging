@@ -13,5 +13,5 @@ resources:
   - keda
   - kube-system
   - kube-tools
-  - networking
+#  - networking
   - observability

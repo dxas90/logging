@@ -1,0 +1,50 @@
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2beta2.json
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: mimir
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: mimir-distributed
+  maxHistory: 2
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    usage_stats:
+      enabled: false
+    query_scheduler:
+      replicas: 1
+    querier:
+      replicas: 1
+    # alertmanager:
+    #   persistentVolume:
+    #     storageClass: longhorn
+    ingester:
+      replicas: 2
+      zoneAwareReplication:
+        enabled: false
+      persistentVolume:
+        # storageClass: longhorn
+        size: 7Gi
+      resources:
+        limits:
+          memory: 2Gi
+    store_gateway:
+      zoneAwareReplication:
+        enabled: false
+      # persistentVolume:
+        # storageClass: longhorn
+    compactor:
+      persistentVolume:
+        # storageClass: longhorn
+        size: 2Gi
