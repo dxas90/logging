@@ -14,7 +14,7 @@ resources:
   - kube-prometheus-stack/install.yaml
   - loki/install.yaml
   - node-exporter/install.yaml
-  - tempo/install.yaml
+  # - tempo/install.yaml # ok
   ### Visibility Addons
   # - ntfy/install.yaml # ok
   # - gatus/install.yaml # ok

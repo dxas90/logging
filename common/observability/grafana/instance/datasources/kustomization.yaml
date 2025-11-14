@@ -5,4 +5,4 @@ kind: Kustomization
 resources:
   - loki.yaml
   - prometheus.yaml
-  - tempo.yaml
+  # - tempo.yaml
