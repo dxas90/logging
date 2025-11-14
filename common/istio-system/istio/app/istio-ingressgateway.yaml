@@ -29,7 +29,7 @@ spec:
     # Deploy the ingress gateway on the Hetzner control plane node
     # This node has the easiest internet access via Slack Nebula overlay
     nodeSelector:
-      node-role.kubernetes.io/control-plane: "true"
+      node-role.kubernetes.io/control-plane: ""
 
     # Tolerate control plane taints
     tolerations:
