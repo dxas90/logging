@@ -6,18 +6,19 @@ components: []
 resources:
   # Pre Flux-Kustomizations
   - namespace.yaml
-  # - github.com/grafana/grafana-operator/deploy/kustomize/overlays/cluster_scoped?ref=v5.20.0
   # Flux-Kustomizations
-  # - alertmanager/install.yaml
+  - alertmanager/install.yaml
   - alloy/install.yaml
-  - blackbox-exporter/install.yaml
-  # - fluent-bit/install.yaml
-  - gatus/install.yaml
+  # - blackbox-exporter/install.yaml # ok
   - grafana/install.yaml
   - kube-prometheus-stack/install.yaml
   - loki/install.yaml
-  # - mimir/install.yaml
   - node-exporter/install.yaml
   - tempo/install.yaml
-  - ntfy/install.yaml
+  ### Visibility Addons
+  # - ntfy/install.yaml # ok
+  # - gatus/install.yaml # ok
+  #### EXPERIMENTAL
   # - victoria-logs/install.yaml
+  # - fluent-bit/install.yaml
+  # - mimir/install.yaml
