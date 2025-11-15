@@ -1,134 +1,151 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended",
-    ":automergeAll"
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  extends: [
+    'config:recommended',
+    ':automergeAll',
   ],
-  "dependencyDashboard": true,
-  "dependencyDashboardTitle": "Renovate Dashboard 🤖",
-  "suppressNotifications": [
-    "prEditedNotification",
-    "prIgnoreNotification"
+  dependencyDashboard: true,
+  dependencyDashboardTitle: 'Renovate Dashboard 🤖',
+  suppressNotifications: [
+    'prEditedNotification',
+    'prIgnoreNotification',
   ],
-  "rebaseWhen": "conflicted",
-  "schedule": ["before 5:30am"],
-  "automerge": true,
-  "automergeType": "pr",
-  "pruneStaleBranches": true,
-  "flux": {
-    "fileMatch": [
-      "kubernetes/.+\\.ya?ml$",
-      "bootstrap/.+\\.ya?ml$"
-    ]
+  rebaseWhen: 'conflicted',
+  schedule: [
+    'before 5:30am',
+  ],
+  automerge: true,
+  automergeType: 'pr',
+  pruneStaleBranches: true,
+  flux: {
+    managerFilePatterns: [
+      '/kubernetes/.+\\.ya?ml$/',
+      '/bootstrap/.+\\.ya?ml$/',
+    ],
   },
-  "helm-values": {
-    "fileMatch": [
-      "kubernetes/.+values\\.ya?ml$",
-      "kubernetes/.+\\.ya?ml$"
-    ]
+  'helm-values': {
+    managerFilePatterns: [
+      '/kubernetes/.+values\\.ya?ml$/',
+      '/kubernetes/.+\\.ya?ml$/',
+    ],
   },
-  "kubernetes": {
-    "fileMatch": [
-      "kubernetes/.+\\.ya?ml$",
-      "bootstrap/.+\\.ya?ml$"
-    ]
+  kubernetes: {
+    managerFilePatterns: [
+      '/kubernetes/.+\\.ya?ml$/',
+      '/bootstrap/.+\\.ya?ml$/',
+    ],
   },
-  "regexManagers": [
+  packageRules: [
     {
-      "fileMatch": [
-        "k3d-config\\.ya?ml$"
+      matchUpdateTypes: [
+        'minor',
+        'patch',
       ],
-      "matchStrings": [
-        "image: (?<depName>.*?):(?<currentValue>.*?)\\s"
-      ],
-      "datasourceTemplate": "docker"
+      automerge: true,
+      automergeType: 'pr',
     },
     {
-      "fileMatch": [
-        "kubernetes/.+\\.ya?ml$"
+      matchUpdateTypes: [
+        'major',
       ],
-      "matchStrings": [
-        "chart: (?<depName>\\S+)\\s+version: [\"']?(?<currentValue>[^\"'\\s]+)[\"']?"
+      automerge: false,
+      reviewersFromCodeOwners: true,
+    },
+    {
+      matchDatasources: [
+        'helm',
       ],
-      "datasourceTemplate": "helm"
-    }
+      addLabels: [
+        'helm',
+      ],
+      commitMessageTopic: 'Helm chart {{depName}}',
+    },
+    {
+      matchDatasources: [
+        'docker',
+      ],
+      addLabels: [
+        'docker',
+      ],
+      commitMessageTopic: 'Docker image {{depName}}',
+    },
+    {
+      matchManagers: [
+        'flux',
+      ],
+      addLabels: [
+        'flux',
+      ],
+      commitMessageTopic: 'Flux {{depName}}',
+    },
+    {
+      addLabels: [
+        'k3s',
+      ],
+      commitMessageTopic: 'K3s {{depName}}',
+      matchPackageNames: [
+        '/k3s/',
+      ],
+    },
+    {
+      matchFileNames: [
+        'mise.toml',
+      ],
+      addLabels: [
+        'tools',
+      ],
+      commitMessageTopic: 'Development tool {{depName}}',
+    },
+    {
+      description: 'Group external-secrets updates',
+      groupName: 'external-secrets',
+      matchPackageNames: [
+        '/external-secrets/',
+      ],
+    },
+    {
+      description: 'Group Traefik updates',
+      groupName: 'traefik',
+      matchPackageNames: [
+        '/traefik/',
+      ],
+    },
+    {
+      description: 'Group monitoring stack updates',
+      groupName: 'monitoring',
+      matchPackageNames: [
+        '/prometheus/',
+        '/grafana/',
+        '/alertmanager/',
+      ],
+    },
+    {
+      description: 'Auto-merge patch updates for stable components',
+      matchUpdateTypes: [
+        'patch',
+      ],
+      automerge: true,
+      matchPackageNames: [
+        '/external-secrets/',
+        '/cert-manager/',
+        '/external-dns/',
+      ],
+    },
   ],
-  "packageRules": [
+  customManagers: [
     {
-      "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true,
-      "automergeType": "pr"
-    },
-    {
-      "matchUpdateTypes": ["major"],
-      "automerge": false,
-      "reviewersFromCodeOwners": true
-    },
-    {
-      "matchDatasources": ["helm"],
-      "addLabels": ["helm"],
-      "commitMessageTopic": "Helm chart {{depName}}"
-    },
-    {
-      "matchDatasources": ["docker"],
-      "addLabels": ["docker"],
-      "commitMessageTopic": "Docker image {{depName}}"
-    },
-    {
-      "matchManagers": ["flux"],
-      "addLabels": ["flux"],
-      "commitMessageTopic": "Flux {{depName}}"
-    },
-    {
-      "matchPackagePatterns": ["k3s"],
-      "addLabels": ["k3s"],
-      "commitMessageTopic": "K3s {{depName}}"
-    },
-    {
-      "matchFileNames": ["mise.toml"],
-      "addLabels": ["tools"],
-      "commitMessageTopic": "Development tool {{depName}}"
-    },
-    {
-      "description": "Group external-secrets updates",
-      "matchPackagePatterns": ["external-secrets"],
-      "groupName": "external-secrets"
-    },
-    {
-      "description": "Group Traefik updates",
-      "matchPackagePatterns": ["traefik"],
-      "groupName": "traefik"
-    },
-    {
-      "description": "Group monitoring stack updates",
-      "matchPackagePatterns": ["prometheus", "grafana", "alertmanager"],
-      "groupName": "monitoring"
-    },
-    {
-      "description": "Auto-merge patch updates for stable components",
-      "matchPackagePatterns": [
-        "external-secrets",
-        "cert-manager",
-        "external-dns"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/kubernetes/.+\\.ya?ml$/',
       ],
-      "matchUpdateTypes": ["patch"],
-      "automerge": true
-    }
+      matchStrings: [
+        '# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\s+.+: ["\']?(?<currentValue>[^"\'\\s]+)["\']?',
+      ],
+      versioningTemplate: '{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}',
+    },
   ],
-  "customManagers": [
-    {
-      "customType": "regex",
-      "fileMatch": [
-        "kubernetes/.+\\.ya?ml$"
-      ],
-      "matchStrings": [
-        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\s+.+: [\"']?(?<currentValue>[^\"'\\s]+)[\"']?"
-      ],
-      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
-    }
-  ],
-  "separateMinorPatch": true,
-  "separateMajorMinor": true,
-  "prConcurrentLimit": 5,
-  "prHourlyLimit": 2
+  separateMinorPatch: true,
+  separateMajorMinor: true,
+  prConcurrentLimit: 5,
+  prHourlyLimit: 2,
 }
