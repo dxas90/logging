@@ -12,3 +12,4 @@ resources:
   # - ../common/kube-tools
   # - ../common/networking
   - ../common/observability
+  - ./playground
