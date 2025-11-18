@@ -8,18 +8,18 @@ resources:
   - namespace.yaml
   # Flux-Kustomizations
   # - alertmanager/install.yaml # ok
-  # - alloy/install.yaml
+  - alloy/install.yaml
   # - blackbox-exporter/install.yaml # ok
   - grafana/install.yaml
-  # - kube-prometheus-stack/install.yaml
-  # - loki/install.yaml
+  - kube-prometheus-stack/install.yaml
+  - loki/install.yaml
   - node-exporter/install.yaml
-  # - tempo/install.yaml
+  - tempo/install.yaml
   ### Visibility Addons
   # - ntfy/install.yaml # ok
   # - gatus/install.yaml # ok
   #### EXPERIMENTAL
-  - victoria-metrics/install.yaml
-  - victoria-logs/install.yaml
-  - fluent-bit/install.yaml
+  # - victoria-metrics/install.yaml
+  # - victoria-logs/install.yaml
+  # - fluent-bit/install.yaml
   # - mimir/install.yaml
