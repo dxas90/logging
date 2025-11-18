@@ -8,3 +8,55 @@ resources:
   - kube-prometheus-stack.yaml
   - node-exporter.yaml
   # - victoria-logs.yaml
+generatorOptions:
+  disableNameSuffixHash: true
+  annotations:
+    kustomize.toolkit.fluxcd.io/substitute: disabled
+  labels:
+    grafana_dashboard: "true"
+# configMapGenerator:
+#   #################################################
+#   # Kubernetes-Mixin dashboards
+#   #################################################
+#   - name: dashboards-mixin-cluster-total
+#     files:
+#       - kubernetes-mixin/cluster-total.json
+#   - name: dashboards-mixin-controller-manager
+#     files:
+#       - kubernetes-mixin/controller-manager.json
+#   - name: dashboards-mixin-k8s-resources-cluster
+#     files:
+#       - kubernetes-mixin/k8s-resources-cluster.json
+#   - name: dashboards-mixin-k8s-resources-namespace
+#     files:
+#       - kubernetes-mixin/k8s-resources-namespace.json
+#   - name: dashboards-mixin-k8s-resources-node
+#     files:
+#       - kubernetes-mixin/k8s-resources-node.json
+#   - name: dashboards-mixin-k8s-resources-pod
+#     files:
+#       - kubernetes-mixin/k8s-resources-pod.json
+#   - name: dashboards-mixin-k8s-resources-workload
+#     files:
+#       - kubernetes-mixin/k8s-resources-workload.json
+#   - name: dashboards-mixin-k8s-resources-workloads-namespace
+#     files:
+#       - kubernetes-mixin/k8s-resources-workloads-namespace.json
+#   - name: dashboards-mixin-kubelet
+#     files:
+#       - kubernetes-mixin/kubelet.json
+#   - name: dashboards-mixin-namespace-by-pod
+#     files:
+#       - kubernetes-mixin/namespace-by-pod.json
+#   - name: dashboards-mixin-namespace-by-workload
+#     files:
+#       - kubernetes-mixin/namespace-by-workload.json
+#   - name: dashboards-mixin-persistentvolumesusage
+#     files:
+#       - kubernetes-mixin/persistentvolumesusage.json
+#   - name: dashboards-mixin-pod-total
+#     files:
+#       - kubernetes-mixin/pod-total.json
+#   - name: dashboards-mixin-workload-total
+#     files:
+#       - kubernetes-mixin/workload-total.json
