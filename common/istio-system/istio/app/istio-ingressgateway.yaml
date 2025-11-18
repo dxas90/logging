@@ -2,9 +2,12 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: istio-ingressgateway
+  name: &app istio-ingressgateway
   namespace: istio-system
 spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/base: *app
   interval: 15m
   targetNamespace: istio-system
   chart:

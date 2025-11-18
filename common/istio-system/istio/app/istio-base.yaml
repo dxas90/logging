@@ -5,6 +5,9 @@ metadata:
   name: &app istio-base
   namespace: istio-system
 spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/base: *app
   interval: 15m
   targetNamespace: istio-system
   chart:

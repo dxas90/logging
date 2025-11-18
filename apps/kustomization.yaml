@@ -6,7 +6,7 @@ resources:
   # - ../common/dbms
   # - ../common/default
   # - ../common/external-secrets
-  # - ../common/istio-system
+  - ../common/istio-system
   # - ../common/keda
   - ../common/kube-system
   # - ../common/kube-tools
