@@ -13,6 +13,7 @@ spec:
     fullnameOverride: victoria-logs
     retentionPeriod: 14d
     server:
+      enableLokiAPI: true
       persistentVolume:
         enabled: true
         size: 2Gi

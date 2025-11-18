@@ -13,6 +13,6 @@ spec:
       protocol: TCP
       targetPort: 8428
   selector:
-    app.kubernetes.io/component: monitoring
-    app.kubernetes.io/name: vmsingle
+    app.kubernetes.io/instance: vm
+    app.kubernetes.io/name: victoria-metrics-single
   type: ClusterIP
