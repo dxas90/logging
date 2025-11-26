@@ -7,7 +7,7 @@ components:
   - ../components
 # remember to add the base resources to the cluster specific kustomization files
 resources:
-  - github.com/dxas90/common//common?ref=v0.2.0
+  - github.com/dxas90/common//common?ref=v0.3.0
   - cert-manager
   # - dbms
   - default
