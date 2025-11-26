@@ -13,7 +13,7 @@ spec:
   prune: true
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: logging
     namespace: flux-system
   wait: true
   interval: 30m
@@ -35,7 +35,7 @@ spec:
   timeout: 10m
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: logging
   path: ./common/istio-system/istio/gateway
   targetNamespace: istio-system
   dependsOn:

@@ -13,7 +13,7 @@ spec:
   path: ./common/observability/node-exporter/app
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: logging
     namespace: flux-system
   interval: 1h
   timeout: 5m

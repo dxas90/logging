@@ -84,3 +84,10 @@ alias = "s"
 run = [
   "flux reconcile source git flux-system ; flux reconcile ks -n flux-system cluster --with-source"
 ]
+
+[tasks.reset-cluster]
+description = "Reset the cluster by deleting and recreating it"
+alias = "rc"
+run = [
+  "kind delete cluster; kind create cluster",
+]

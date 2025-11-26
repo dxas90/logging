@@ -13,7 +13,7 @@ spec:
   path: ./common/observability/kube-prometheus-stack/app
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: logging
     namespace: flux-system
   prune: true
   wait: true
@@ -34,7 +34,7 @@ spec:
   path: ./common/observability/kube-prometheus-stack/config
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: logging
     namespace: flux-system
   prune: true
   interval: 30m

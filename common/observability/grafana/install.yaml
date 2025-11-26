@@ -13,7 +13,7 @@ spec:
   path: ./common/observability/grafana/app
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: logging
     namespace: flux-system
   prune: true
   wait: true
@@ -34,7 +34,7 @@ spec:
   path: ./common/observability/grafana/instance
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: logging
     namespace: flux-system
   dependsOn:
     - name: grafana

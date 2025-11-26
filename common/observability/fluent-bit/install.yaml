@@ -13,7 +13,7 @@ spec:
   path: ./common/observability/fluent-bit/app
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: logging
     namespace: flux-system
   interval: 1h
   prune: true

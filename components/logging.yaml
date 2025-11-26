@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/source.toolkit.fluxcd.io/gitrepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: logging
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  ref:
+    branch: main
+  url: https://github.com/dxas90/logging.git
+  ignore: |
+    # exclude all
+    /*
+    # include kubernetes directory
+    !/clusters/kind/*
+    !/apps/*
+    !/repositories
+    !/common/*
