@@ -50,7 +50,7 @@ echo "Secrets cached in .mise.local.toml"
 description = "Setup Flux in the cluster"
 alias = 'cs' # `mise run cs`
 run = [
-  "kubectl apply -k bootstrap",
+  "kubectl apply -k github.com/dxas90/common/install?ref=v0.2.0",
 ]
 
 [tasks.flux-secret]

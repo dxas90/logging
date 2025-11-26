@@ -6,6 +6,4 @@ resources:
   # Pre Flux-Kustomizations
   - namespace.yaml
   # Flux-Kustomizations
-  - cloudnative-pg/install.yaml
-  - dragonfly-operator/install.yaml
   - nats/install.yaml
