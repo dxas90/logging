@@ -1,53 +1,231 @@
-# GitOps FluxCD infrastructure — AI assistant notes
+# FluxCD GitOps Infrastructure — AI Assistant Instructions
 
-Purpose: give concise, repo-specific guidance so an AI coding agent can make correct, low-risk edits.
+**Purpose**: Provide actionable, repo-specific guidance for AI coding agents working with this FluxCD + Kustomize infrastructure.
 
-Top-level architecture (quick): this repo is FluxCD + Kustomize driven. Key dirs:
-- `bootstrap/` — minimal FluxCD bootstrap (do not add application installs here).
-- `clusters/<type>/vars/` — cluster-settings.yaml and SOPS-encrypted cluster-secrets.yaml (per-cluster overrides).
-- `common/<category>/<app>/` — application installs. Each app follows the co-located pattern below.
+## 🏗️ Architecture Quick Start
 
-Core conventions you must follow
-- Co-located repositories: every app MUST place `app/helmrepository.yaml` or `app/ocirepository.yaml` next to `app/helmrelease.yaml` and `app/kustomization.yaml`.
-- `install.yaml` CRs (in `common/<category>/<app>/install.yaml`) must use spec.path relative to repo root: `./common/<category>/<app>/app` (never `./kubernetes/main/...`).
-- Secrets: use SOPS (`*.sops.yaml`) and store cluster keys in `clusters/<type>/vars/cluster-secrets.yaml`. Do not commit plaintext secrets.
+**Directory hierarchy**: `bootstrap/` → `clusters/<type>/` → `common/<category>/<app>/`
 
-Deployment & debugging commands (use when validating edits):
-- Bootstrap Flux: `kubectl apply --kustomize bootstrap`
-- Apply a cluster: `kubectl apply --kustomize clusters/k3d` (replace k3d)
-- Flux status / reconcile:
-  - `flux get kustomizations`
-  - `flux get helmreleases`
-  - `flux reconcile kustomization <name>`
-  - `kubectl describe helmrelease <app> -n <namespace>`
+- **`bootstrap/`**: FluxCD installation only — keep minimal, never add applications here
+- **`clusters/<type>/`**: Environment-specific config (k3d, kind, aws, azure, gcp, metal)
+  - `flux-system/gotk-sync.yaml`: FluxCD sync configuration
+  - `vars/cluster-settings.yaml`: Environment variables (ConfigMap)
+  - `vars/cluster-secrets.yaml`: Encrypted secrets (SOPS)
+- **`common/<category>/<app>/`**: Shared infrastructure applications
+  - Categories: `cert-manager`, `external-secrets`, `kube-system`, `kube-tools`, `observability`, `networking`, `dbms`, `istio-system`, `keda`
+  - Each app follows strict co-located repository pattern (see below)
 
-Patterns & examples (copy/paste safe)
-- App layout (example): `common/observability/grafana/app/{kustomization.yaml,ocirepository.yaml,helmrelease.yaml}` and `common/observability/grafana/install.yaml`.
-- Gateway / Istio: Gateway resource lives at `common/istio-system/istio/gateway/gateway.yaml`. HTTPRoute parentRefs must point to name `external` and namespace `istio-system` and match listener sectionName (http/https).
+## 🔒 Critical Conventions (Must Follow)
 
-Integration points & external deps
-- Flux controllers (source, kustomize, helm) manage reconciliation.
-- SOPS + age for secret encryption; External Secrets Operator and Vault integrations present.
+### 1. Co-located Repository Pattern
+**Every app MUST include its own repository definition in the `app/` directory:**
 
-Editing rules for AI agents (must obey)
-1. Never add or modify secrets inline; create `.sops.yaml` encrypted file or update `clusters/*/vars/cluster-secrets.yaml`.
-2. Follow co-located repository pattern; if you must migrate a legacy `repositories/` entry, also add the matching `install.yaml` and update parent kustomization.
-3. Keep `bootstrap/` minimal — no application kustomizations there.
-4. When changing an `install.yaml` path, update the parent category `kustomization.yaml` to include the new `install.yaml`.
+```yaml
+# Example: common/observability/grafana/app/
+├── kustomization.yaml       # Resources: ocirepository.yaml, helmrelease.yaml
+├── ocirepository.yaml       # Co-located repository (or helmrepository.yaml)
+└── helmrelease.yaml         # Application deployment
+```
 
-Files to inspect first (priority):
-- `common/README.md` — app patterns
-- `README.md` (repo root) — quick start, bootstrapping and SOPS usage
-- `bootstrap/README.md` and `clusters/*/vars/*.yaml` for cluster-specific behavior
+**Never reference** the legacy `repositories/` directory — it's being phased out.
 
-Validation & notes for PRs
-- If a change affects runtime, include a short validation note in the PR body listing the Flux/kubectl commands you ran (e.g. `flux reconcile ...`, `kubectl describe ...`).
-- Prefer configuration-only, low-risk edits when keys or runtime access are missing.
+### 2. FluxCD Kustomization Paths
+**`install.yaml` paths MUST be relative to repo root:**
 
-When blocked
-- If a change needs the SOPS age key or Git deploy key, stop and request the secret (do not attempt to guess or create one).
+```yaml
+# ✅ CORRECT: common/observability/grafana/install.yaml
+spec:
+  path: ./common/observability/grafana/app
 
-Offer to add: a PR checklist template (reconcile + SOPS checks) if the maintainer wants it.
+# ❌ WRONG - legacy paths
+spec:
+  path: ./kubernetes/main/apps/grafana/app
+```
+
+### 3. Secret Management
+- **SOPS encryption**: Secrets end with `.sops.yaml` suffix
+- **Cluster secrets**: Store in `clusters/<type>/vars/cluster-secrets.yaml`
+- **Never commit plaintext secrets** — if blocked, request SOPS age key
+- **Variable substitution**: FluxCD postBuild interpolates from cluster-settings/cluster-secrets
+
+## 📝 Standard Application Pattern
+
+### Adding a New Application
+
+**1. Create directory structure:**
+```bash
+mkdir -p common/<category>/<app-name>/app
+```
+
+**2. Repository definition** (choose one based on upstream):
+```yaml
+# app/helmrepository.yaml (for traditional Helm charts)
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: <app-name>
+  namespace: flux-system
+spec:
+  interval: 1h
+  url: https://charts.example.com/
+
+# OR app/ocirepository.yaml (preferred for observability apps)
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: OCIRepository
+metadata:
+  name: <app-name>
+  namespace: flux-system
+spec:
+  interval: 12h
+  url: oci://ghcr.io/bjw-s/helm/app-template
+  ref:
+    tag: 3.7.0
+```
+
+**3. App resources kustomization:**
+```yaml
+# app/kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ocirepository.yaml  # or helmrepository.yaml
+  - helmrelease.yaml
+```
+
+**4. FluxCD Kustomization:**
+```yaml
+# install.yaml
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: <app-name>
+  namespace: flux-system
+spec:
+  targetNamespace: <namespace>
+  path: ./common/<category>/<app-name>/app
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  prune: true
+  wait: true
+  interval: 1h
+  timeout: 5m
+```
+
+**5. Update parent kustomization:**
+```yaml
+# common/<category>/kustomization.yaml
+resources:
+  - <app-name>/install.yaml  # Add this line
+```
+
+### Repository Type Conventions
+- **Observability apps**: Prefer `ocirepository.yaml` (ghcr.io/bjw-s/helm/app-template)
+- **Infrastructure/system**: Use `helmrepository.yaml` based on upstream availability
+- **Databases**: Individual namespaces (`cloudnative-pg`, `database`)
+
+### Namespace Strategy
+- **Observability**: Single `observability` namespace for monitoring/logging
+- **System components**: Dedicated namespaces (`kube-system`, `cert-manager`, `kyverno`, etc.)
+
+## 🔗 Dependency Management
+
+**Use `dependsOn` in install.yaml for explicit ordering:**
+```yaml
+spec:
+  dependsOn:
+    - name: cert-manager
+      namespace: flux-system
+    - name: external-secrets
+      namespace: flux-system
+```
+
+**Common dependency chains:**
+- `external-secrets` → `cert-manager` → `vault`
+- `kube-prometheus-stack` → `grafana` → `alertmanager`
+- `cilium` → `coredns` → `metrics-server`
+
+## 🐛 Debugging & Validation Commands
+
+### FluxCD Status
+```bash
+flux get kustomizations              # View all Kustomizations
+flux get helmreleases                # View all HelmReleases
+flux reconcile kustomization <name>  # Force reconciliation
+flux logs --follow                   # Stream Flux logs
+```
+
+### Application Troubleshooting
+```bash
+kubectl describe helmrelease <app> -n <namespace>
+kubectl logs -n flux-system deployment/kustomize-controller
+kubectl logs -n flux-system deployment/helm-controller
+kubectl logs -n flux-system deployment/source-controller
+```
+
+### Deployment
+```bash
+kubectl apply --kustomize bootstrap       # Bootstrap FluxCD
+kubectl apply --kustomize clusters/k3d    # Apply cluster config (replace k3d)
+```
+
+## 🚪 Gateway API / Istio Integration
+
+**Gateway resource**: `common/istio-system/istio/gateway/gateway.yaml`
+
+**HTTPRoute parentRefs must reference:**
+- `name: external`
+- `namespace: istio-system`
+- `sectionName: http` or `https` (matching Gateway listener)
+
+**Ingress gateway specifics:**
+- Deployed with node affinity to control plane
+- NodePort service (30080/30443)
+- See `common/istio-system/istio/DEPLOYMENT-GUIDE.md` for details
+
+## 📋 Code Review Checklist
+
+Before submitting changes, verify:
+
+- [ ] `install.yaml` uses correct path: `./common/<category>/<app>/app`
+- [ ] Repository definition is co-located in `app/` directory
+- [ ] Parent category `kustomization.yaml` includes new `install.yaml`
+- [ ] No plaintext secrets committed (use `.sops.yaml` or cluster-secrets)
+- [ ] `bootstrap/` directory remains minimal (no apps)
+- [ ] Dependencies declared with `dependsOn` if required
+- [ ] Namespace matches category conventions
+
+**PR description should include validation commands run:**
+```bash
+flux reconcile kustomization <app>
+kubectl describe helmrelease <app> -n <namespace>
+# Include output showing successful reconciliation
+```
+
+## 🔍 Key Files Reference
+
+**Must read before editing:**
+- `common/README.md` — Standard application patterns
+- `README.md` — Bootstrap, SOPS, multi-cluster setup
+- `repositories/README.md` — Legacy pattern migration guide
+- `common/istio-system/istio/DEPLOYMENT-GUIDE.md` — Istio/Gateway specifics
+
+**Examples to copy/reference:**
+- `common/observability/grafana/` — Complete OCI-based app
+- `common/cert-manager/` — Multi-Kustomization with dependencies
+- `common/istio-system/istio/gateway/` — Gateway API usage
+
+## 🚫 When Blocked
+
+**If you need:**
+- SOPS age key for secret decryption
+- Git deploy key for repository access
+- Cluster access credentials
+
+**→ Stop and request the key** — do not attempt to generate or guess values.
+
+**Prefer configuration-only edits** when runtime access is unavailable.
 # GitOps Kubernetes Infrastructure - AI Coding Assistant Instructions
 
 ## 🏗️ Architecture Overview

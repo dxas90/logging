@@ -1,59 +1,110 @@
-## AGENTS.md — AI coding agent quick guide
+# AI Coding Agent Quick Reference
 
-Purpose: help an AI coding agent be productive in this FluxCD + Kustomize GitOps repo.
+**Quick start**: Read `.github/copilot-instructions.md` first for comprehensive patterns and conventions.
 
-Quick files to open first
+## 📚 Essential Files (Read First)
 
-- `.github/copilot-instructions.md` — authoritative, repo-specific rules and patterns.
-- `README.md` (repo root) — bootstrap & SOPS notes.
-- `repositories/README.md` — examples for co-located repository files.
-- `bootstrap/`, `clusters/*/vars/` — cluster bootstrap and SOPS-encrypted secrets.
-- `common/*/*/install.yaml` and corresponding `common/*/*/app/` — app install kustomizations and app resources.
-- `get_secret.sh` — helper script the repo ships.
+1. **`.github/copilot-instructions.md`** — Authoritative repo-specific rules and patterns
+2. **`README.md`** — Bootstrap workflow, SOPS setup, multi-cluster overview
+3. **`common/README.md`** — Application deployment patterns and categories
+4. **`repositories/README.md`** — Legacy→co-located migration examples
+5. **`common/istio-system/istio/DEPLOYMENT-GUIDE.md`** — Istio/Gateway API specifics
 
-Core conventions (short)
+## 🎯 Common Tasks
 
-- This is a FluxCD-driven GitOps repo. Changes are intended to be declarative and applied via Flux.
-- Co-located repository pattern: every app places `app/helmrepository.yaml` or `app/ocirepository.yaml` next to `app/helmrelease.yaml` and `app/kustomization.yaml`.
-- `install.yaml` CRs under `common/<category>/<app>/install.yaml` MUST use `spec.path: ./common/<category>/<app>/app` (relative to repo root).
-- Secrets use SOPS (`*.sops.yaml`) and cluster keys live in `clusters/<type>/vars/cluster-secrets.yaml`. Never commit plaintext secrets.
-
-Most-used commands (copy/paste)
+### Add New Application
 
 ```bash
-# Bootstrap Flux system
-kubectl apply --kustomize bootstrap
+# 1. Create structure
+mkdir -p common/<category>/<app>/app
 
-# Apply a cluster overlay (replace k3d/kind/etc.)
-kubectl apply --kustomize clusters/k3d
+# 2. Create files (see .github/copilot-instructions.md for templates):
+#    - app/kustomization.yaml
+#    - app/{oci,helm}repository.yaml
+#    - app/helmrelease.yaml
+#    - install.yaml
 
-# Flux troubleshooting / status
-flux get kustomizations
-flux get helmreleases
-flux reconcile kustomization <name>
-kubectl describe helmrelease <app> -n <namespace>
-kubectl logs -n flux-system deployment/kustomize-controller
+# 3. Update parent
+#    Add to common/<category>/kustomization.yaml:
+#    resources:
+#      - <app>/install.yaml
 ```
 
-Common tasks & troubleshooting notes
+### Troubleshoot Failed Deployment
 
-- To add an app: create `common/<category>/<app>/app/{kustomization.yaml,helmrelease.yaml,helmrepository.yaml}` and `common/<category>/<app>/install.yaml`, then update the category `kustomization.yaml` to include the new `install.yaml`.
-- If a HelmRelease fails, inspect `kubectl describe helmrelease ...` then `kubectl logs` for the helm-controller in `flux-system`.
-- Kustomize postBuild substitutes values from `clusters/*/vars/cluster-settings.yaml` and `cluster-secrets.yaml` — missing SOPS keys will break applies.
+```bash
+# Check Flux status
+flux get kustomizations
+flux get helmreleases -A
 
-Secrets & access
+# Describe specific resource
+kubectl describe helmrelease <app> -n <namespace>
 
-- SOPS + age is required: do not attempt to edit or decrypt secrets without the repo's age key. If a change needs secrets or a deploy key, stop and request the key.
-- `.gitattributes` contains SOPS rules (look for `*.sops.*`) — follow repo's encryption patterns.
+# Check controller logs
+kubectl logs -n flux-system deployment/kustomize-controller
+kubectl logs -n flux-system deployment/helm-controller
+```
 
-PR / validation checklist (small)
+### Validate Changes
 
-- Does `install.yaml` use `./common/<category>/<app>/app`? If not, fix and update parent kustomization.
-- Avoid adding plaintext secrets; create/modify `.sops.yaml` encrypted files or update `clusters/*/vars/cluster-secrets.yaml`.
-- Include the Flux/`kubectl` commands you ran to validate runtime behavior in the PR description (e.g., `flux reconcile ...`, `kubectl describe helmrelease ...`).
+```bash
+# Reconcile specific Kustomization
+flux reconcile kustomization <app>
 
-Example app layout to reference
+# Watch reconciliation
+flux logs --follow
 
-- `common/observability/grafana/app/{kustomization.yaml,ocirepository.yaml,helmrelease.yaml}` and `common/observability/grafana/install.yaml`.
+# Verify deployment
+kubectl get pods -n <namespace>
+```
 
-If anything in this guide is unclear or you want policy/verbosity changes, tell me what to expand or contract and I will iterate.
+## ⚠️ Critical Rules (Quick Reference)
+
+1. **Path format**: Use `./common/<category>/<app>/app` in `install.yaml` (never `./kubernetes/main/...`)
+2. **Co-located repos**: Place `{oci,helm}repository.yaml` in `app/` directory (not `repositories/`)
+3. **No plaintext secrets**: Use `.sops.yaml` or `clusters/*/vars/cluster-secrets.yaml`
+4. **Bootstrap isolation**: Never add apps to `bootstrap/` directory
+5. **Parent updates**: Add new `install.yaml` to category's `kustomization.yaml`
+
+## 🔧 Helper Scripts
+
+**`get_secret.sh`**: Fetch secrets from Bitwarden
+
+```bash
+./get_secret.sh <field_name>  # Requires bw CLI and unlocked vault
+```
+
+## 📦 Repository Type Selection
+
+- **Observability apps** → `ocirepository.yaml` (ghcr.io/bjw-s/helm/app-template)
+- **Infrastructure/system** → `helmrepository.yaml` (upstream Helm charts)
+- **Custom apps** → Based on upstream availability
+
+## 🔗 Dependency Examples
+
+```yaml
+# In install.yaml
+spec:
+  dependsOn:
+    - name: cert-manager
+      namespace: flux-system
+```
+
+**Common chains**:
+
+- `external-secrets` → `cert-manager` → `vault`
+- `kube-prometheus-stack` → `grafana` → `alertmanager`
+
+## 🚦 Reference Examples
+
+**Complete app structure**: `common/observability/grafana/`
+**Multi-Kustomization**: `common/cert-manager/` (app + issuers)
+**Gateway API**: `common/istio-system/istio/gateway/`
+
+## 🚫 When Blocked
+
+**Missing SOPS age key or Git deploy key?** → Stop and request credentials (never guess/generate)
+
+---
+
+**For detailed patterns, templates, and comprehensive workflows**, see **`.github/copilot-instructions.md`**
