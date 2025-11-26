@@ -5,7 +5,7 @@ kind: Kustomization
 components: []
 resources:
   # Pre Flux-Kustomizations
-  - namespace.yaml
+  # - namespace.yaml
   # Flux-Kustomizations
   # - alertmanager/install.yaml # ok
   - alloy/install.yaml

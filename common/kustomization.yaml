@@ -7,14 +7,10 @@ components:
   - ../components
 # remember to add the base resources to the cluster specific kustomization files
 resources:
-  - github.com/dxas90/common//common/cert-manager?ref=v0.2.0
+  - github.com/dxas90/common//common?ref=v0.2.0
   - cert-manager
-  - github.com/dxas90/common//common/dbms?ref=v0.2.0
   - dbms
   - default
-  - github.com/dxas90/common//common/istio-system?ref=v0.2.0
-  - github.com/dxas90/common//common/keda?ref=v0.2.0
   - kube-system
-  - github.com/dxas90/common//common/kube-tools?ref=v0.2.0
 #  - networking
-  - observability
+#  - observability
