@@ -19,19 +19,19 @@
   pruneStaleBranches: true,
   flux: {
     managerFilePatterns: [
-      '/kubernetes/.+\\.ya?ml$/',
+      '/common/.+\\.ya?ml$/',
       '/bootstrap/.+\\.ya?ml$/',
     ],
   },
   'helm-values': {
     managerFilePatterns: [
-      '/kubernetes/.+values\\.ya?ml$/',
-      '/kubernetes/.+\\.ya?ml$/',
+      '/common/.+values\\.ya?ml$/',
+      '/common/.+\\.ya?ml$/',
     ],
   },
   kubernetes: {
     managerFilePatterns: [
-      '/kubernetes/.+\\.ya?ml$/',
+      '/common/.+\\.ya?ml$/',
       '/bootstrap/.+\\.ya?ml$/',
     ],
   },
@@ -136,7 +136,7 @@
     {
       customType: 'regex',
       managerFilePatterns: [
-        '/kubernetes/.+\\.ya?ml$/',
+        '/common/.+\\.ya?ml$/',
       ],
       matchStrings: [
         '# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\s+.+: ["\']?(?<currentValue>[^"\'\\s]+)["\']?',
