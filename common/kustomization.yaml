@@ -9,8 +9,8 @@ components:
 resources:
   - github.com/dxas90/common//common?ref=v0.2.0
   - cert-manager
-  - dbms
+  # - dbms
   - default
-  - kube-system
+  # - kube-system
 #  - networking
-#  - observability
+  - observability

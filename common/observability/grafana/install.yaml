@@ -1,24 +1,24 @@
----
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: &app grafana
-  namespace: flux-system
-spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
-  targetNamespace: observability
-  path: ./common/observability/grafana/app
-  sourceRef:
-    kind: GitRepository
-    name: logging
-    namespace: flux-system
-  prune: true
-  wait: true
-  interval: 1h
-  timeout: 5m
+# ---
+# # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+# apiVersion: kustomize.toolkit.fluxcd.io/v1
+# kind: Kustomization
+# metadata:
+#   name: &app grafana
+#   namespace: flux-system
+# spec:
+#   commonMetadata:
+#     labels:
+#       app.kubernetes.io/name: *app
+#   targetNamespace: observability
+#   path: ./common/observability/grafana/app
+#   sourceRef:
+#     kind: GitRepository
+#     name: logging
+#     namespace: flux-system
+#   prune: true
+#   wait: true
+#   interval: 1h
+#   timeout: 5m
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -36,8 +36,6 @@ spec:
     kind: GitRepository
     name: logging
     namespace: flux-system
-  dependsOn:
-    - name: grafana
   interval: 1h
   prune: true
   wait: false
