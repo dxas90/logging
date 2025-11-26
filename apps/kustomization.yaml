@@ -8,7 +8,7 @@ resources:
   # - ../common/dbms
   # - ../common/default
   # - ../common/external-secrets
-  - github.com/dxas90/common//common/istio-system?ref=v0.2.0
+  - github.com/dxas90/common//common/istio-system?ref=v0.3.0
   # - ../common/keda
   - ../common/kube-system
   # - ../common/kube-tools
