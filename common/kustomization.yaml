@@ -8,7 +8,7 @@ resources:
   - cert-manager/install.yaml
   - dbms
   - default
-  - external-secrets/install.yaml
+  - external-secrets
   - istio-system
   - keda
   - kube-system
