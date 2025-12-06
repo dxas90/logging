@@ -4,6 +4,6 @@ kind: Kustomization
 transformers:
   - labels.yaml
 resources:
-  - github.com/metallb/metallb/config/native?ref=v0.15.2
+  - github.com/metallb/metallb/config/native?ref=v0.15.3
   - ./local-path
   - ./metallb/ks.yaml
