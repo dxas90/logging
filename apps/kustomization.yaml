@@ -7,7 +7,7 @@ resources:
   # - ../common/cert-manager
   # - ../common/dbms
   # - ../common/default
-  - github.com/dxas90/common//common?ref=v0.3.0
+  - github.com/dxas90/common//common?ref=v0.6.0
   # - ../common/kube-system
   # - ../common/networking
   # - ../common/observability
